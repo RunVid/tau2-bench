@@ -81,8 +81,11 @@ check the Portal project for resources if a network outage prevented cleanup.
   This is not recovery of a killed benchmark process's in-flight call.
 - Transport failures fail the episode; they are not treated as silent audio or
   successful completion. Queue overflow also fails rather than dropping media.
-- Finalized transcript events are authoritative. Interim text is not treated as
-  spoken text; interrupted utterances use the finalized text supplied by Portal.
+- The adapter preserves finalized transcript text supplied by Portal, including
+  the Engine's transcript semantics. That text may contain control markers that
+  were not spoken; the adapter does not filter or reinterpret them. Interim text
+  is not emitted as finalized transcript evidence. Recorded audio is separate
+  evidence of what was spoken, including for interrupted utterances.
 - Transcript offsets are preserved on Portal's `answered_at` clock. They can be
   derived from engine speech events / transcript emission and are **not** claimed
   to be sample-accurate acoustic boundaries or client playback acknowledgements.
