@@ -40,6 +40,7 @@ class PineProvider:
         self._room = None
         self._source = None
         self._connected = False
+        self._media_ready: asyncio.Event | None = None
         self._closing = False
         self._media_disconnected_at: float | None = None
         self.ended = False
@@ -137,6 +138,7 @@ class PineProvider:
                 raise RuntimeError("Pine web call did not return media credentials")
             self._spawn(self._read_events())
             self._room = rtc.Room()
+            self._media_ready = asyncio.Event()
 
             @self._room.on("disconnected")
             def disconnected(reason):
@@ -147,6 +149,7 @@ class PineProvider:
             def track_subscribed(track, publication, participant):
                 if track.kind == rtc.TrackKind.KIND_AUDIO:
                     self._spawn(self._read_audio(track))
+                    self._media_ready.set()
 
             await self._room.connect(call.connection.url, call.connection.token)
             self._source = rtc.AudioSource(PINE_MEDIA_SAMPLE_RATE, 1, queue_size_ms=100)
@@ -155,10 +158,23 @@ class PineProvider:
                 track,
                 rtc.TrackPublishOptions(source=rtc.TrackSource.SOURCE_MICROPHONE),
             )
+            await self._wait_for_media()
             self._connected = True
         except BaseException:
             await self.close()
             raise
+
+    async def _wait_for_media(self) -> None:
+        """Do not start the caller clock before the engine publishes its audio track."""
+        async with asyncio.timeout(60):
+            while not self._media_ready.is_set():
+                self.check_health()
+                if self.ended:
+                    raise RuntimeError("Pine call ended before media became ready")
+                try:
+                    await asyncio.wait_for(self._media_ready.wait(), timeout=0.2)
+                except asyncio.TimeoutError:
+                    continue
 
     async def _read_events(self) -> None:
         async for event in self.client.calls.stream(self.call_id, max_reconnects=10):

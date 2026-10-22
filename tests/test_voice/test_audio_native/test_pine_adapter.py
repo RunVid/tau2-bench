@@ -320,3 +320,25 @@ def test_result_after_call_cancellation_does_not_fail_episode():
             await provider.submit_result("tc_1", "conflicting result")
 
     asyncio.run(run())
+
+
+def test_media_readiness_waits_for_track_and_surfaces_early_termination():
+    async def scenario():
+        provider = PineProvider(config())
+        provider._media_ready = asyncio.Event()
+        waiter = asyncio.create_task(provider._wait_for_media())
+        await asyncio.sleep(0)
+        assert not waiter.done()
+        provider._media_ready.set()
+        await waiter
+
+        provider._media_ready.clear()
+        provider.ended = True
+        with pytest.raises(RuntimeError, match="ended before media"):
+            await provider._wait_for_media()
+        provider.ended = False
+        provider._failure = RuntimeError("SSE failed")
+        with pytest.raises(RuntimeError, match="transport failed"):
+            await provider._wait_for_media()
+
+    asyncio.run(scenario())
