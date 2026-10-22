@@ -215,7 +215,8 @@ class PineProvider:
             self.events.put_nowait(event)
             if event.event == "call.ended":
                 self.ended = True
-                self._ended_at = time.monotonic()
+                if self._ended_at is None:
+                    self._ended_at = time.monotonic()
         if not self.ended:
             raise RuntimeError("Pine event stream ended before call.ended")
 
