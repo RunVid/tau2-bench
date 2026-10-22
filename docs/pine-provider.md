@@ -106,6 +106,13 @@ Use one configuration throughout, regular speech complexity, and account-owned
 caller voices. Banking and Entity are separate optional packages (582 and 1200
 calls respectively); they do not enter the voice-v2 overall.
 
+**Banking is not fully compatible with the current Portal tool-result limit.**
+Actual `grep` results measured 22,723–31,811 JSON bytes, exceeding Portal's 16 KiB
+limit. These results are rejected, never truncated by this adapter. A result-size
+contract review is required before running the Banking package. The local retail
+smoke's largest observed result was 3,643 bytes; that sample is not an exhaustive
+bound for every standard-domain tool or task.
+
 ```bash
 uv run --no-sync tau2 run --audio-native --benchmark voice \
   --audio-native-provider pine --pine-config "$(cat pine-config.json)" \
