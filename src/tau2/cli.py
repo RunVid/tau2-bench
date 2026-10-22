@@ -302,7 +302,7 @@ def add_run_args(parser):
         type=json.loads,
         default=None,
         help="JSON Pine configuration: frontend_model, backend_model, "
-        "frontend_instructions, backend_instructions, optional voice_id.",
+        "frontend_instructions, backend_instructions, voice_id.",
     )
     parser.add_argument(
         "--live-config",

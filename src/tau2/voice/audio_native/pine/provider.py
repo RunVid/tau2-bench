@@ -204,9 +204,22 @@ class PineProvider:
 
     async def submit_result(self, tool_call_id: str, output: str) -> None:
         """Return the environment's result without executing tools locally."""
-        await self.client.calls.submit_tool_result(
-            self.call_id, tool_call_id, body={"output": output}
-        )
+        from pinevoice import ConflictError
+
+        try:
+            await self.client.calls.submit_tool_result(
+                self.call_id, tool_call_id, body={"output": output}
+            )
+        except ConflictError:
+            invocation = await self.client.calls.get_tool_call(
+                self.call_id, tool_call_id
+            )
+            if invocation.status not in {"expired", "canceled"}:
+                raise
+            # The engine already received the deadline/cancellation outcome.
+            # A late environment result must not revive that invocation or turn
+            # a normal hangup into an infrastructure failure.
+            logger.debug("Discarding result for terminal Pine tool invocation")
 
     async def close(self) -> None:
         """Release media and remote resources, including after partial setup."""
@@ -217,11 +230,19 @@ class PineProvider:
         if self._tasks:
             await asyncio.gather(*self._tasks, return_exceptions=True)
         if self._room is not None:
-            await self._room.disconnect()
-            self._room = None
+            try:
+                await self._room.disconnect()
+            except Exception:
+                logger.exception("Could not disconnect Pine benchmark media")
+            finally:
+                self._room = None
         if self._source is not None:
-            await self._source.aclose()
-            self._source = None
+            try:
+                await self._source.aclose()
+            except Exception:
+                logger.exception("Could not release Pine benchmark audio source")
+            finally:
+                self._source = None
         if self.client is not None:
             if self.call_id is not None and not self.ended:
                 try:

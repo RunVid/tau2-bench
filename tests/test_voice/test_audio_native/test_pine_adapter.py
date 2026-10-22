@@ -115,6 +115,8 @@ def test_final_transcript_keeps_server_timing_and_ignores_unspoken_deltas():
 
 
 def test_tool_results_use_sdk_and_preserve_failed_submission_for_retry():
+    pytest.importorskip("pinevoice")
+
     async def run():
         client = SimpleNamespace(calls=SimpleNamespace(submit_tool_result=AsyncMock()))
         provider = PineProvider(config(), client=client)
@@ -264,3 +266,57 @@ def test_terminal_tick_drains_final_transcript_and_buffered_media():
         assert sum(t.agent_audio_bytes for t in [first, second, third]) == 480
     finally:
         adapter._bg_loop.stop()
+
+
+def test_media_cleanup_failure_does_not_leak_remote_agent():
+    async def run():
+        client = SimpleNamespace(
+            calls=SimpleNamespace(hangup=AsyncMock()),
+            agents=SimpleNamespace(delete=AsyncMock()),
+        )
+        provider = PineProvider(config(), client=client)
+        provider.call_id = "call_test"
+        provider.agent_id = "agent_test"
+        provider._room = SimpleNamespace(
+            disconnect=AsyncMock(side_effect=RuntimeError("closed"))
+        )
+        source = SimpleNamespace(aclose=AsyncMock())
+        provider._source = source
+        await provider.close()
+        source.aclose.assert_awaited_once()
+        client.calls.hangup.assert_awaited_once_with("call_test")
+        client.agents.delete.assert_awaited_once_with("agent_test")
+        assert provider.call_id is None
+        assert provider.agent_id is None
+
+    asyncio.run(run())
+
+
+def test_result_after_call_cancellation_does_not_fail_episode():
+    pinevoice = pytest.importorskip("pinevoice")
+    import httpx
+
+    async def run():
+        response = httpx.Response(
+            409,
+            request=httpx.Request("POST", "http://localhost/result"),
+            json={"error": {"code": "conflict", "message": "terminal"}},
+        )
+        client = SimpleNamespace(
+            calls=SimpleNamespace(
+                submit_tool_result=AsyncMock(
+                    side_effect=pinevoice.ConflictError(response)
+                ),
+                get_tool_call=AsyncMock(
+                    return_value=SimpleNamespace(status="canceled")
+                ),
+            )
+        )
+        provider = PineProvider(config(), client=client)
+        provider.call_id = "call_test"
+        await provider.submit_result("tc_1", "late result")
+        client.calls.get_tool_call.return_value = SimpleNamespace(status="completed")
+        with pytest.raises(pinevoice.ConflictError):
+            await provider.submit_result("tc_1", "conflicting result")
+
+    asyncio.run(run())
