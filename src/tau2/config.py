@@ -238,9 +238,15 @@ DEFAULT_CASCADED_TTS_SAMPLE_RATE = 24000
 # PROVIDER REGISTRY (derived from above)
 # =============================================================================
 DEFAULT_LAUNA_MODEL = "launa-v1"
+PINE_MEDIA_SAMPLE_RATE = 24000
+PINE_MEDIA_READY_TIMEOUT_SECONDS = 60
+PINE_TERMINAL_DRAIN_TIMEOUT_SECONDS = 5
+PINE_TERMINAL_QUIET_SECONDS = 0.2
+
 LAUNA_SAMPLE_RATE = 24000  # fixed, both directions of the Launa voice API
 
 DEFAULT_AUDIO_NATIVE_MODELS = {
+    "pine": "pine-custom",
     "launa": DEFAULT_LAUNA_MODEL,
     "openai": DEFAULT_OPENAI_REALTIME_MODEL,
     "openai_live": DEFAULT_OPENAI_LIVE_MODEL,
@@ -263,6 +269,7 @@ DEFAULT_AUDIO_NATIVE_REASONING_EFFORT: dict[str, str | None] = {
 }
 
 AUDIO_NATIVE_PROVIDER_TYPES = {
+    "pine": "cascaded",
     "launa": "audio_native",
     "openai": "audio_native",
     "openai_live": "audio_native",

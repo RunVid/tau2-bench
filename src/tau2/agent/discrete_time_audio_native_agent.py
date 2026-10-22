@@ -75,6 +75,7 @@ from tau2.data_model.message import (
     ToolMessage,
     UserMessage,
 )
+from tau2.data_model.pine_config import PineConfig
 from tau2.data_model.usage import UsageRecord
 from tau2.environment.tool import Tool
 from tau2.utils.transcript.linearization import has_meaningful_content
@@ -85,7 +86,7 @@ from tau2.voice.pricing import compute_tick_cost
 
 # Provider type alias
 AudioNativeProvider = Literal[
-    "openai", "openai_live", "gemini", "xai", "nova", "qwen", "livekit"
+    "pine", "openai", "openai_live", "gemini", "xai", "nova", "qwen", "livekit"
 ]
 
 # VAD config union type (string annotations for lazy resolution)
@@ -238,6 +239,7 @@ class DiscreteTimeAudioNativeAgent(FullDuplexAgent[DiscreteTimeAgentState]):
         cascaded_config: Optional["CascadedConfig"] = None,
         audio_taps_dir: Optional[Path] = None,
         live_config: Optional[LiveConfig] = None,
+        pine_config: Optional[PineConfig] = None,
         voice: Optional[str] = None,
         transcription_language: Optional[str] = None,
         language: Optional[str] = None,
@@ -288,6 +290,7 @@ class DiscreteTimeAudioNativeAgent(FullDuplexAgent[DiscreteTimeAgentState]):
         self.max_inactive_seconds = max_inactive_seconds
         self.cascaded_config = cascaded_config
         self.live_config = live_config
+        self.pine_config = pine_config
         self.voice = voice
         self.transcription_language = transcription_language
         self.language = language
@@ -318,6 +321,8 @@ class DiscreteTimeAudioNativeAgent(FullDuplexAgent[DiscreteTimeAgentState]):
                 mode=OpenAIVADMode.SERVER_VAD,
                 threshold=DEFAULT_OPENAI_VAD_THRESHOLD,
             )
+        elif provider == "pine":
+            self.vad_config = None  # Pine owns its speech pipeline.
         elif provider == "gemini":
             from tau2.voice.audio_native.gemini.provider import GeminiVADConfig
 
@@ -393,6 +398,7 @@ class DiscreteTimeAudioNativeAgent(FullDuplexAgent[DiscreteTimeAgentState]):
                 audio_format=self.audio_format,
                 cascaded_config=self.cascaded_config,
                 live_config=self.live_config,
+                pine_config=self.pine_config,
                 trace_path=self._live_trace_path,
                 voice=self.voice,
                 transcription_language=self.transcription_language,
@@ -843,6 +849,8 @@ class DiscreteTimeAudioNativeAgent(FullDuplexAgent[DiscreteTimeAgentState]):
     @classmethod
     def is_stop(cls, message: AssistantMessage) -> bool:
         """Check if the message is a stop message."""
+        if message.raw_data and message.raw_data.get("session_ended") is True:
+            return True
         if message.content is None:
             return False
         return cls.STOP_TOKEN in message.content
@@ -895,6 +903,7 @@ def create_discrete_time_audio_native_agent(tools, domain_policy, **kwargs):
             audio_taps_dir=audio_taps_dir,
             **domain_kwargs,
             live_config=audio_native_config.live_config,
+            pine_config=audio_native_config.pine_config,
             voice=audio_native_config.voice,
             transcription_language=audio_native_config.transcription_language,
             language=audio_native_config.language,

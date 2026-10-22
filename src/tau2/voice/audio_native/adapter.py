@@ -34,6 +34,7 @@ from tau2.voice.audio_native.tick_result import (
 
 if TYPE_CHECKING:
     from tau2.data_model.live_config import LiveConfig
+    from tau2.data_model.pine_config import PineConfig
 
 
 class DiscreteTimeAdapter(ABC):
@@ -388,6 +389,7 @@ def create_adapter(
     audio_format: Optional[AudioFormat] = None,
     cascaded_config: Any = None,
     live_config: Optional["LiveConfig"] = None,
+    pine_config: Optional["PineConfig"] = None,
     trace_path: Optional[Path] = None,
     voice: Optional[str] = None,
     transcription_language: Optional[str] = None,
@@ -447,7 +449,21 @@ def create_adapter(
 
     # --- Construct adapter ---
     adapter: DiscreteTimeAdapter
-    if provider == "launa":
+    if provider == "pine":
+        from tau2.voice.audio_native.pine.discrete_time_adapter import (
+            DiscreteTimePineAdapter,
+        )
+
+        if pine_config is None:
+            raise ValueError("pine requires pine_config")
+        model = pine_config.frontend_model
+        adapter = DiscreteTimePineAdapter(
+            tick_duration_ms=tick_duration_ms,
+            config=pine_config,
+            audio_format=audio_format,
+            language=language or "en",
+        )
+    elif provider == "launa":
         from tau2.voice.audio_native.launa.discrete_time_adapter import (
             DiscreteTimeLaunaAdapter,
         )
