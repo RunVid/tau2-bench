@@ -104,6 +104,10 @@ class TickResult(BaseModel):
     )
     live_transcript: LiveTranscriptTick | None = None
 
+    session_ended: bool = Field(
+        default=False, description="Provider reports that the remote session ended"
+    )
+
     # --- VAD events (provider-agnostic) ---
     # Normalized VAD event types detected this tick:
     #   - "speech_started": User started speaking (OpenAI/xAI/Nova)

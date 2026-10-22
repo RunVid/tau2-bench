@@ -12,6 +12,7 @@ Full-duplex voice evaluation via provider-specific realtime APIs. Each provider 
 | **xai** | Native audio | xAI Grok Voice Agent | grok-voice-think-fast-2.0 |
 | **nova** | Native audio | Amazon Nova Sonic | amazon.nova-2-sonic-v1:0 |
 | **qwen** | Native audio | Alibaba Qwen Omni | qwen3-omni-flash-realtime |
+| **pine** | Hosted frontend/backend | Pine SDK + LiveKit room | Configurable; [setup](../../../../docs/pine-provider.md) |
 | **livekit** | Cascaded (STT→LLM→TTS) | LiveKit + Deepgram + OpenAI | Configurable |
 
 ## Architecture

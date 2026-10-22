@@ -278,6 +278,7 @@ def add_run_args(parser):
             "qwen",
             "livekit",
             "launa",
+            "pine",
         ],
         default=DEFAULT_AUDIO_NATIVE_PROVIDER,
         help=f"Audio native API provider. Default is '{DEFAULT_AUDIO_NATIVE_PROVIDER}'.",
@@ -297,6 +298,13 @@ def add_run_args(parser):
         help="Audio native model to use. If not specified, uses the default model for the selected provider.",
     )
     parser.add_argument(
+        "--pine-config",
+        type=json.loads,
+        default=None,
+        help="JSON Pine configuration: frontend_model, backend_model, "
+        "frontend_instructions, backend_instructions, optional voice_id.",
+    )
+    parser.add_argument(
         "--live-config",
         type=json.loads,
         default=None,
@@ -307,7 +315,7 @@ def add_run_args(parser):
         action=argparse.BooleanOptionalAction,
         default=None,
         help="Run user LLM/TTS generation without blocking audio ticks. "
-        "Defaults to enabled for openai_live and disabled for other providers. "
+        "Defaults to enabled for openai_live and pine; disabled otherwise. "
         "Use --no-realtime-generation to disable.",
     )
     parser.add_argument(
@@ -743,6 +751,7 @@ def main():
                 reasoning_effort=args.reasoning_effort,
                 **({"voice": args.voice} if args.voice is not None else {}),
                 live_config=args.live_config,
+                pine_config=args.pine_config,
                 realtime_generation=args.realtime_generation,
                 # Timing
                 tick_duration_seconds=args.tick_duration,

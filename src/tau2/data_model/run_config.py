@@ -46,6 +46,7 @@ from tau2.data_model.elicitation import (
     ElicitationConfig,
 )
 from tau2.data_model.live_config import LiveConfig
+from tau2.data_model.pine_config import PineConfig
 from tau2.data_model.semantic_communication import CommunicateScoring
 from tau2.data_model.voice import SpeechComplexity, VoiceSettings
 
@@ -82,10 +83,18 @@ class AudioNativeConfig(BaseModel):
 
     # Provider selection
     provider: Literal[
-        "openai", "openai_live", "gemini", "xai", "nova", "qwen", "livekit", "launa"
+        "openai",
+        "openai_live",
+        "gemini",
+        "xai",
+        "nova",
+        "qwen",
+        "livekit",
+        "launa",
+        "pine",
     ] = Field(
         default=DEFAULT_AUDIO_NATIVE_PROVIDER,
-        description="Audio native API provider: 'openai' (OpenAI Realtime), 'openai_live' (OpenAI Live), 'gemini' (Gemini Live), 'xai' (xAI Grok Voice Agent), 'nova' (Amazon Nova Sonic), 'qwen' (Alibaba Qwen Omni), 'launa' (Salesforce Launa), or 'livekit' (LiveKit cascaded STT→LLM→TTS)",
+        description="Audio native API provider: 'openai' (OpenAI Realtime), 'openai_live' (OpenAI Live), 'gemini' (Gemini Live), 'xai' (xAI Grok Voice Agent), 'nova' (Amazon Nova Sonic), 'qwen' (Alibaba Qwen Omni), 'launa' (Salesforce Launa), 'pine' (Pine custom agent), or 'livekit' (LiveKit cascaded STT→LLM→TTS)",
     )
 
     transcription_language: Optional[str] = Field(
@@ -126,10 +135,14 @@ class AudioNativeConfig(BaseModel):
         default=None,
         description="Backend model, voice, and optional prompt overrides for the openai_live provider",
     )
+    pine_config: Optional[PineConfig] = Field(
+        default=None,
+        description="Custom frontend/backend settings for the Pine provider",
+    )
     realtime_generation: Optional[bool] = Field(
         default=None,
         description="Whether user LLM and TTS generation run without blocking audio ticks. "
-        "Defaults to enabled for openai_live and disabled for other providers.",
+        "Defaults to enabled for openai_live and pine; disabled otherwise.",
     )
 
     @property
@@ -137,14 +150,22 @@ class AudioNativeConfig(BaseModel):
         """Resolve the provider-aware default for real-time user generation."""
         if self.realtime_generation is not None:
             return self.realtime_generation
-        return self.provider == "openai_live"
+        return self.provider in {"openai_live", "pine"}
 
     @model_validator(mode="after")
-    def validate_live_config(self):
+    def validate_provider_config(self):
         if (self.provider == "openai_live") != (self.live_config is not None):
             raise ValueError(
                 "live_config is required for openai_live and only valid for that provider"
             )
+        if (self.provider == "pine") != (self.pine_config is not None):
+            raise ValueError("pine_config is required for pine and only valid for pine")
+        if self.pine_config is not None:
+            self.model = self.pine_config.frontend_model
+            if self.realtime_generation is False:
+                raise ValueError(
+                    "pine requires realtime_generation for continuous media"
+                )
         return self
 
     # Timing configuration
