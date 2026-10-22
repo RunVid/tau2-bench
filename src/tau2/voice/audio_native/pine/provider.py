@@ -5,12 +5,18 @@ Tau's environment, then return through the public SDK result endpoint.
 """
 
 import asyncio
+import time
 from dataclasses import dataclass
 from typing import Any
 
 from loguru import logger
 
-from tau2.config import PINE_MEDIA_SAMPLE_RATE
+from tau2.config import (
+    PINE_MEDIA_READY_TIMEOUT_SECONDS,
+    PINE_MEDIA_SAMPLE_RATE,
+    PINE_TERMINAL_DRAIN_TIMEOUT_SECONDS,
+    PINE_TERMINAL_QUIET_SECONDS,
+)
 from tau2.data_model.pine_config import PineConfig
 from tau2.environment.tool import Tool
 
@@ -44,11 +50,24 @@ class PineProvider:
         self._closing = False
         self._media_disconnected_at: float | None = None
         self.ended = False
+        self._ended_at: float | None = None
+        self._last_audio_at = 0.0
+        self._audio_tracks: set[str] = set()
 
     @property
     def is_connected(self) -> bool:
         """Whether call setup and media connection completed."""
         return self._connected
+
+    @property
+    def media_drained(self) -> bool:
+        """Require remote track removal and a quiet receive queue after call end."""
+        return (
+            self._ended_at is not None
+            and not self._audio_tracks
+            and time.monotonic() - max(self._ended_at, self._last_audio_at)
+            >= PINE_TERMINAL_QUIET_SECONDS
+        )
 
     def _spawn(self, coroutine) -> None:
         task = asyncio.create_task(coroutine)
@@ -63,6 +82,12 @@ class PineProvider:
 
     def check_health(self) -> None:
         """Surface background transport failures instead of silently stalling."""
+        if (
+            self._ended_at is not None
+            and time.monotonic() - self._ended_at > PINE_TERMINAL_DRAIN_TIMEOUT_SECONDS
+            and not self.media_drained
+        ):
+            raise RuntimeError("Pine media did not drain after the terminal call event")
         if self._failure is not None:
             raise RuntimeError("Pine provider transport failed") from self._failure
         if (
@@ -84,6 +109,9 @@ class PineProvider:
             ) from exc
 
         self.ended = False
+        self._ended_at = None
+        self._last_audio_at = 0.0
+        self._audio_tracks.clear()
         self._closing = False
         self._media_disconnected_at = None
         self._failure = None
@@ -144,12 +172,18 @@ class PineProvider:
             def disconnected(reason):
                 if not self._closing:
                     self._media_disconnected_at = asyncio.get_running_loop().time()
+                    self._audio_tracks.clear()
 
             @self._room.on("track_subscribed")
             def track_subscribed(track, publication, participant):
                 if track.kind == rtc.TrackKind.KIND_AUDIO:
+                    self._audio_tracks.add(publication.sid)
                     self._spawn(self._read_audio(track))
                     self._media_ready.set()
+
+            @self._room.on("track_unsubscribed")
+            def track_unsubscribed(track, publication, participant):
+                self._audio_tracks.discard(publication.sid)
 
             await self._room.connect(call.connection.url, call.connection.token)
             self._source = rtc.AudioSource(PINE_MEDIA_SAMPLE_RATE, 1, queue_size_ms=100)
@@ -166,7 +200,7 @@ class PineProvider:
 
     async def _wait_for_media(self) -> None:
         """Do not start the caller clock before the engine publishes its audio track."""
-        async with asyncio.timeout(60):
+        async with asyncio.timeout(PINE_MEDIA_READY_TIMEOUT_SECONDS):
             while not self._media_ready.is_set():
                 self.check_health()
                 if self.ended:
@@ -181,6 +215,7 @@ class PineProvider:
             self.events.put_nowait(event)
             if event.event == "call.ended":
                 self.ended = True
+                self._ended_at = time.monotonic()
         if not self.ended:
             raise RuntimeError("Pine event stream ended before call.ended")
 
@@ -195,6 +230,7 @@ class PineProvider:
         )
         try:
             async for frame in stream:
+                self._last_audio_at = time.monotonic()
                 self.events.put_nowait(AudioFrame(bytes(frame.frame.data)))
         finally:
             await stream.aclose()

@@ -224,6 +224,7 @@ def test_replayed_expired_tool_is_not_executed():
 def test_terminal_tick_drains_final_transcript_and_buffered_media():
     provider = SimpleNamespace(
         call_id="call_test",
+        media_drained=True,
         events=None,
         check_health=lambda: None,
         send_audio=AsyncMock(),
@@ -342,3 +343,26 @@ def test_media_readiness_waits_for_track_and_surfaces_early_termination():
             await provider._wait_for_media()
 
     asyncio.run(scenario())
+
+
+def test_terminal_media_barrier_requires_track_end_and_late_frame_quiet(monkeypatch):
+    now = [10.0]
+    monkeypatch.setattr(
+        "tau2.voice.audio_native.pine.provider.time.monotonic", lambda: now[0]
+    )
+    provider = PineProvider(config())
+    provider.ended = True
+    provider._ended_at = 10.0
+    provider._audio_tracks.add("track_agent")
+    now[0] = 10.3
+    assert not provider.media_drained
+    provider._audio_tracks.clear()
+    # A frame arriving after the SSE terminal resets the receive quiet window.
+    provider._last_audio_at = 10.25
+    assert not provider.media_drained
+    now[0] = 10.5
+    assert provider.media_drained
+    provider._audio_tracks.add("track_agent")
+    now[0] = 16.0
+    with pytest.raises(RuntimeError, match="did not drain"):
+        provider.check_health()

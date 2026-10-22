@@ -85,6 +85,9 @@ check the Portal project for resources if a network outage prevented cleanup.
   tick audio, using the same activity threshold as the OpenAI Live adapter.
 - `call.ended` stops the agent through explicit provider termination, not a fake
   spoken stop token. Final transcript events must precede that terminal event.
+  Termination also waits for remote audio track removal and 200 ms without new
+  audio; queued tick audio is drained. Failure to reach this barrier within five
+  seconds fails the episode rather than silently clipping trailing media.
 - Usage costs are not fabricated when Portal provides no per-model usage ledger.
   Review transcript/audio alignment and judge coverage before a public submission.
 

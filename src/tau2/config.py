@@ -239,6 +239,9 @@ DEFAULT_CASCADED_TTS_SAMPLE_RATE = 24000
 # =============================================================================
 DEFAULT_LAUNA_MODEL = "launa-v1"
 PINE_MEDIA_SAMPLE_RATE = 24000
+PINE_MEDIA_READY_TIMEOUT_SECONDS = 60
+PINE_TERMINAL_DRAIN_TIMEOUT_SECONDS = 5
+PINE_TERMINAL_QUIET_SECONDS = 0.2
 
 LAUNA_SAMPLE_RATE = 24000  # fixed, both directions of the Launa voice API
 

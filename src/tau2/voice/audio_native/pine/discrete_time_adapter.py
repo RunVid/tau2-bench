@@ -107,6 +107,7 @@ class DiscreteTimePineAdapter(DiscreteTimeAdapter):
         # Deliver any buffered last audio before reporting remote termination.
         result.session_ended = (
             self._ended
+            and self.provider.media_drained
             and not self._buffered_agent_audio
             and self.provider.events.empty()
         )
