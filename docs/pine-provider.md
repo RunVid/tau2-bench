@@ -21,7 +21,13 @@ the same development version is not sufficient. Until that SDK revision is
 published, use the reviewed Portal worktree; there is no dependency on a private
 Git URL or an undeclared local path in the benchmark lock. Use `uv run --no-sync`
 after the editable install so dependency synchronization does not remove it.
-The RTC client is provided by the existing voice extra.
+The RTC client is provided by the voice extra. The minimum LiveKit RTC version is
+1.1.5 (paired with Agents 1.5.2): its upstream fix removes the hidden native
+100 ms queue that could drop audio even while Python's queue was unbounded.
+The adapter eagerly drains SDK audio into its bounded 4096-event queue and fails
+on overflow. LiveKit's internal native queue is upstream-managed and unbounded;
+the public Python API does not expose a native queue limit. This is not a strict
+whole-process memory bound during a stalled Python runtime.
 
 Set `PINE_VOICE_API_KEY` and optionally `PINE_VOICE_BASE_URL` (including `/v1`).
 Credentials are read by the SDK and are never part of the serialized run config.
