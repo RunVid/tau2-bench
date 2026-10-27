@@ -55,7 +55,8 @@
     "gpt-live-1-astra-high-banking_openai_2026-09-16",
     "salesforce-launa-v1_salesforce_2026-10-06",
     "grok-voice-3-0_xai_2026-10-14",
-    "ava-zero_avartha_2026-10-22"
+    "ava-zero_avartha_2026-10-22",
+    "pine-voice-1-0_pineai_2026-10-27"
   ],
   "legacy_submissions": [
     "claude-3-7-sonnet_anthropic_2024-06-20",
