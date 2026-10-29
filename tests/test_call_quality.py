@@ -276,7 +276,7 @@ def test_incomplete_or_unpaired_judgments_leave_experience_unscored():
     complete = _live(False, False)
     missing = {"naturalness": complete["naturalness"]}
     assert call_quality.experience_counts(sim, missing) == (2, None)
-    # Missing-Live-transcript units are not judged, so pairing is incomplete.
+    # A fidelity-only input error leaves a naturalness utterance unpaired.
     blocked = dict(complete)
     blocked["speech_fidelity"] = _verdict(
         "speech_fidelity",
@@ -284,6 +284,14 @@ def test_incomplete_or_unpaired_judgments_leave_experience_unscored():
         [("live-segment:1", "input")],
     )
     assert call_quality.experience_counts(sim, blocked) == (2, None)
+    # Any other unit error (a judge timeout) leaves the call unscored.
+    timed_out = dict(complete)
+    timed_out["speech_fidelity"] = _verdict(
+        "speech_fidelity",
+        [("live-segment:0", True, False)],
+        [("live-segment:1", "response")],
+    )
+    assert call_quality.experience_counts(sim, timed_out) == (2, None)
     errored = dict(complete)
     errored["naturalness"] = _verdict("naturalness", [], error="ValueError: x")
     assert call_quality.experience_counts(sim, errored) == (0, None)
@@ -299,6 +307,28 @@ def test_incomplete_or_unpaired_judgments_leave_experience_unscored():
         [("live-segment:0", True, True), ("live-segment:1", False, False)],
     )
     assert call_quality.experience_counts(sim, sparse) == (1, 1)
+
+
+def test_live_speech_without_a_transcript_is_left_out():
+    """Both judges skip an utterance with no Live transcript; the rest is scored."""
+    sim = _simulation()
+    units = [("live-segment:0", True, True), ("live-segment:1", True, False)]
+    gap = [("live-segment:2", "input")]
+    verdicts = {
+        "naturalness": _verdict("naturalness", units, gap),
+        "speech_fidelity": _verdict(
+            "speech_fidelity", [(u, True, False) for u, _, _ in units], gap
+        ),
+    }
+    assert call_quality.experience_counts(sim, verdicts) == (2, 1)
+    assert call_quality.experience_outcome(2, 1) == CallOutcome.FAIL
+    # With no transcribed utterance left, there is nothing to score.
+    only_gaps = {
+        measure: _verdict(measure, [], gap)
+        for measure in ("naturalness", "speech_fidelity")
+    }
+    assert call_quality.experience_counts(sim, only_gaps) == (0, 0)
+    assert call_quality.experience_outcome(0, 0) == CallOutcome.UNSCORED
 
 
 def test_non_live_units_pair_by_agent_chunk_groups():

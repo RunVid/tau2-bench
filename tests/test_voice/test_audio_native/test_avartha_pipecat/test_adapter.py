@@ -693,6 +693,34 @@ def test_korean_syllables_and_attached_particles_advance_the_text():
     assert shown == ["함께 확인해", " 볼게요.", " 차액은", " 218,840원입니다."]
 
 
+def test_hindi_syllables_advance_the_text_even_out_of_order():
+    """Hindi words arrive a syllable at a time, sometimes with a word's last
+    syllable after the next word's first ("छो", "सी", "बा", "टी", "त"). Only
+    "ए" + "क" ever joined into a word, so a line's text stopped at "एक" until
+    its caption, and a barge-in before then discarded the rest although it
+    had played."""
+
+    shown = _transcripts(
+        [
+            [
+                TranscriptEvent("एक छोटी सी बात — आपने जो ऑर्डर ID बताया, वह नहीं मिला।"),
+                _audio_ticks(1),
+                *[AgentWordEvent(s) for s in ("ए", "क", "छो", "सी", "बा", "टी", "त")],
+            ],
+            [
+                _audio_ticks(1),
+                *[
+                    AgentWordEvent(s)
+                    for s in ("आ", "प", "ने", "जो", "ऑ", "र्ड", "र", "ID")
+                ],
+            ],
+            [_audio_ticks(1), *[AgentWordEvent(s) for s in ("ब", "ता", "या,")]],
+        ]
+    )
+
+    assert shown == ["एक छोटी सी बात", " — आपने जो ऑर्डर ID", " बताया,"]
+
+
 def test_chinese_digits_between_full_width_commas_advance_the_text():
     """No space follows "，", so "1，1，6，" never ended as a whole word and
     the line waited for its caption."""

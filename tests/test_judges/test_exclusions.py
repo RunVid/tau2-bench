@@ -243,7 +243,7 @@ def test_fidelity_skips_injected_opener_clip(tmp_path, monkeypatch):
         return SimpleNamespace(content='{"findings": []}')
 
     monkeypatch.setattr("tau2.judges.fidelity.generate", generate)
-    judge = FidelityJudge(contract("speech-fidelity-v6"))
+    judge = FidelityJudge(contract("speech-fidelity-v7"))
     evidence = RunEvidence(
         simulation=sim,
         task=Task(id="t", user_scenario={"instructions": "Fixture"}),
@@ -306,7 +306,7 @@ def test_contracts_record_their_exclusion_rule():
         "naturalness-v17-rubric-v21-ko-indirect-honorific-v1": NATURALNESS,
         "hi-gender-v16-rubric-v26": BOTH,
         "quality-v7-rubric-v4": InputExclusions.NONE,
-        "speech-fidelity-v6": InputExclusions.OPENER_AND_CONTROL_TURNS,
+        "speech-fidelity-v7": InputExclusions.OPENER_AND_CONTROL_TURNS,
     }
 
 

@@ -3,7 +3,7 @@
   "benchmark_version": "voice-v2",
   "frame_revision": "regional-release-data-v16",
   "interaction_version": "voice-v2-interaction-call-v1",
-  "experience_version": "voice-v2-experience-call-v1",
+  "experience_version": "voice-v2-experience-call-v2",
   "cells": [
     {
       "language": "en",

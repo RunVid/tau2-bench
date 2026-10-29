@@ -1,5 +1,5 @@
 {
-  "revision": "reviewed-naturalness-v21-en-default-v1",
+  "revision": "reviewed-naturalness-v21-en-default-speech-fidelity-v7-v1",
   "donor_revision": "tau-multilingual-validation-evidence-v1",
   "source_prompt_sha256": "2017872dfbba0cd46b08bb3af956c7c6e3f13c4a979540e914dbb2f96e24a2a5",
   "contracts": [
@@ -294,14 +294,90 @@
       "implementation": "tool-use-v7"
     },
     {
-      "contract_id": "speech-fidelity-v6",
+      "contract_id": "speech-fidelity-v7",
       "input_exclusions": "injected-opener-and-control-turns-v1",
-      "source_revision": "speech-fidelity-v6-candidate-20261005-v2",
+      "source_revision": "speech-fidelity-v7-schema-reply-v1",
       "model": "gemini/gemini-3.1-pro-preview",
       "model_args": {
         "temperature": 0.0,
-        "max_tokens": 32768,
-        "timeout": 120
+        "max_tokens": 8192,
+        "timeout": 120,
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "speech_fidelity_reply",
+            "strict": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "findings": {
+                  "type": "array",
+                  "maxItems": 8,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "category": {
+                        "type": "string",
+                        "enum": [
+                          "mispronunciation",
+                          "word_substitution",
+                          "missing_word",
+                          "extra_or_hallucinated_word",
+                          "number_date_currency",
+                          "email_url_code",
+                          "punctuation_or_formatting",
+                          "acronym_brand_name",
+                          "clipped_or_garbled",
+                          "clip_truncation",
+                          "other"
+                        ]
+                      },
+                      "time_range": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "issue": {
+                        "type": "string"
+                      },
+                      "severity": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 3
+                      },
+                      "confidence": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "is_truncation": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "category",
+                      "time_range",
+                      "issue",
+                      "severity",
+                      "confidence",
+                      "is_truncation"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "findings"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
       },
       "prompt": {
         "prompt_version": "v6.1",
@@ -312,7 +388,7 @@
       },
       "nativeness_criteria": {},
       "quality_criteria": [],
-      "scope_note": "Fidelity-only prompt retaining original fidelity criteria and conservative decision rule, with time range, severity, confidence, and clip-truncation category and flag; candidate awaiting human validation.",
+      "scope_note": "Speech-fidelity v6 prompt, rubric and decision rule with a schema-constrained reply and a lower output cap; candidate awaiting human validation.",
       "speech_material": {
         "output_shape": "Return only JSON matching this shape:\n{\n  \"findings\": [\n    {\n      \"category\": \"mispronunciation\",\n      \"time_range\": \"1.2-1.8\",\n      \"issue\": \"brief description of the audible discrepancy\",\n      \"severity\": 2,\n      \"confidence\": 0.9,\n      \"is_truncation\": false\n    }\n  ]\n}\nUse approximate start-end seconds relative to this clip for time_range, or null if it cannot be localized reliably. Use an integer severity of 1, 2, or 3 and a numeric confidence from 0 to 1. Use a JSON boolean (true or false) for is_truncation on every finding. Use one of the listed fidelity categories, or clip_truncation when a cutoff itself is the finding. Return an empty findings list when there is no clear discrepancy. Do not add other fields.",
         "language_guidance": {
@@ -339,7 +415,7 @@
     {
       "language": "en",
       "measure": "speech_fidelity",
-      "contract_id": "speech-fidelity-v6",
+      "contract_id": "speech-fidelity-v7",
       "evaluation_level": "utterance",
       "agent_gender": null,
       "needs_audio": true
@@ -363,7 +439,7 @@
     {
       "language": "es",
       "measure": "speech_fidelity",
-      "contract_id": "speech-fidelity-v6",
+      "contract_id": "speech-fidelity-v7",
       "evaluation_level": "utterance",
       "agent_gender": null,
       "needs_audio": true
@@ -395,7 +471,7 @@
     {
       "language": "pt",
       "measure": "speech_fidelity",
-      "contract_id": "speech-fidelity-v6",
+      "contract_id": "speech-fidelity-v7",
       "evaluation_level": "utterance",
       "agent_gender": null,
       "needs_audio": true
@@ -443,7 +519,7 @@
     {
       "language": "hi",
       "measure": "speech_fidelity",
-      "contract_id": "speech-fidelity-v6",
+      "contract_id": "speech-fidelity-v7",
       "evaluation_level": "utterance",
       "agent_gender": null,
       "needs_audio": true
@@ -483,7 +559,7 @@
     {
       "language": "ko",
       "measure": "speech_fidelity",
-      "contract_id": "speech-fidelity-v6",
+      "contract_id": "speech-fidelity-v7",
       "evaluation_level": "utterance",
       "agent_gender": null,
       "needs_audio": true
@@ -515,7 +591,7 @@
     {
       "language": "zh",
       "measure": "speech_fidelity",
-      "contract_id": "speech-fidelity-v6",
+      "contract_id": "speech-fidelity-v7",
       "evaluation_level": "utterance",
       "agent_gender": null,
       "needs_audio": true
@@ -548,6 +624,6 @@
   "unvalidated_contract_ids": [
     "naturalness-v17-rubric-v21-language-specific-draft2",
     "naturalness-v17-rubric-v21-ko-indirect-honorific-v1",
-    "speech-fidelity-v6"
+    "speech-fidelity-v7"
   ]
 }

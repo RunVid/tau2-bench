@@ -84,7 +84,7 @@ def test_reviewed_v21_is_default_with_validation_still_pending():
     assert set(production.unvalidated_contract_ids) == {
         reviewed["contract_id"],
         KO_CONTRACT_ID,
-        "speech-fidelity-v6",
+        "speech-fidelity-v7",
     }
     assert not any(
         row.source == "validated_contract" and row.diagnostic_id == "naturalness"

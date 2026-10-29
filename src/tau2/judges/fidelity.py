@@ -70,6 +70,27 @@ class FidelityReply(BaseModel):
         list[Finding], Field(description="Audible speech-fidelity findings.")
     ]
 
+    @model_validator(mode="before")
+    @classmethod
+    def drop_no_issue_findings(cls, data):
+        """The rubric's severity 0 means no clear issue, to be returned as an
+        empty findings list. A finding the judge still marks severity 0 is that
+        same no-issue answer, so it is dropped rather than failing the reply."""
+        if isinstance(data, dict) and isinstance(data.get("findings"), list):
+            data = {
+                **data,
+                "findings": [
+                    finding
+                    for finding in data["findings"]
+                    if not (
+                        isinstance(finding, dict)
+                        and type(finding.get("severity")) in (int, float)
+                        and finding["severity"] == 0
+                    )
+                ],
+            }
+        return data
+
 
 class FidelityJudge(BaseJudge):
     """Execute the calibrated fidelity protocol."""

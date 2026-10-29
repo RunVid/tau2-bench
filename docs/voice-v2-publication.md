@@ -73,15 +73,18 @@ submission: Interaction from each scored call's saved ticks plus its saved
 `tool_use` verdict, Experience from its saved `naturalness` and
 `speech_fidelity` verdicts (see [Interaction](glossary.md#interaction) and
 [Generation quality](glossary.md#generation-quality)). A partial verdict
-leaves the affected component unknown or the call's Experience unscored. This
-includes units blocked by a missing Live transcript, which do not block judge
-diagnostics. Infrastructure-error calls carry no quality record. Outside Live
+leaves the affected component unknown or the call's Experience unscored.
+Utterances blocked by a missing Live transcript are the exception: as in judge
+diagnostics, they are left out and the rest of the call is scored
+(`voice-v2-experience-call-v2`). Infrastructure-error calls carry no quality
+record. Outside Live
 runs the two judges number utterances differently. Pairing follows the agent
 chunk groups of the saved ticks (`utterance_alignment`), never ordinal
 position.
 
-For the 2026-10-02 export this reproduces the release's final pooled counts
-(`quality-scores.json`) for all three providers and nine core cells. No call
+For the 2026-10-02 export, `voice-v2-experience-call-v1` reproduced the
+release's final pooled counts (`quality-scores.json`) for all three providers
+and nine core cells; v2 changes only GPT Live's Experience. No call
 is `excluded`. Earlier drafts excluded twelve Korean calls with an
 unresponsive period. Those calls were replaced before the final export, and
 the final scores keep the remaining unresponsive-period calls scored.

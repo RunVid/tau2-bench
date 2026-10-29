@@ -139,7 +139,9 @@ as judged; its blocked units stay out of the pass fraction and are reported as
 `input_error_units`. A call a measure cannot judge at all for that reason (for
 call-level measures, any missing transcript) is excluded and reported as
 `input_excluded_calls`. Any other judge error (a model or API failure, an
-unparseable reply) still blocks: rerun `tau2 judges suite` to retry it. A
+unparseable reply) still blocks. `tau2 judges suite` already asks again, in
+the same run, for units whose reply was incomplete or invalid (`--unit-retries`,
+default 2, keeping every successful unit); rerun it to retry what is left. A
 measure whose applicable calls are all excluded still blocks.
 
 Only the default production judge catalog is accepted. Verdicts made with

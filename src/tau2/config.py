@@ -9,6 +9,10 @@ DEFAULT_TASK_SUBSET_SEED = 42
 DEFAULT_MAX_CONCURRENCY = 3
 DEFAULT_JUDGE_PROCESSES = 1
 DEFAULT_JUDGE_CONCURRENCY = 1
+# Further attempts, in the same run, at judge units whose reply was incomplete
+# or invalid. Such failures are usually chance (a model looping until its output
+# limit) and succeed when asked again.
+DEFAULT_JUDGE_UNIT_RETRIES = 2
 DEFAULT_NUM_TRIALS = 1
 DEFAULT_SAVE_TO = None
 DEFAULT_LOG_LEVEL = "ERROR"

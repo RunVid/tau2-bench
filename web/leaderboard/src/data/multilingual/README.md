@@ -18,7 +18,7 @@ behavior.
   conditions), labelled pass^3, and “—” for a package without the file.
 - **Interaction** and **Generation quality** come from the optional
   `benchmark-quality.json` (`voice-v2-interaction-call-v1` and
-  `voice-v2-experience-call-v1`): passed / (passed + failed) calls, pooled over
+  `voice-v2-experience-call-v2`): passed / (passed + failed) calls, pooled over
   the scope shown. Unscored and excluded calls are left out. A package without
   the file shows “—” for both.
 - The 3D frontier compares the three scores, higher being better; missing

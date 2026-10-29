@@ -51,11 +51,12 @@ _ITEM_ID = "avartha"
 _WORD_MATCH_SLACK_CHARS = 16
 # Shorter words ("I", "a", "to") match only the very next word, never skip.
 _WORD_SKIP_MIN_CHARS = 3
-# Hangul, kana and CJK ideographs. TTS alignment times these a syllable at a
-# time ("확", "인", "해" for "확인해"), so a spoken piece is rarely a whole word.
+# Hangul, kana, CJK ideographs and Devanagari. TTS alignment times these a
+# syllable at a time ("확", "인", "해" for "확인해"; "छो", "टी" for "छोटी"), so a
+# spoken piece is rarely a whole word.
 _SYLLABIC_CHARS = re.compile(
     r"[ᄀ-ᇿ぀-ヿ㄰-㆏㐀-䶿"
-    r"一-鿿가-힣豈-﫿]"
+    r"一-鿿가-힣豈-﫿ऀ-ॿ꣠-ꣿ]"
 )
 # How far past the last matched syllable a syllable may land: a dropped
 # syllable or two and the space or punctuation between words.
@@ -65,7 +66,11 @@ _CJK_PUNCTUATION = re.compile(r"[　-〿！-／：-＠［-｀｛-･]")
 
 
 def _is_syllabic(text: str) -> bool:
-    """Whether every letter of ``text`` is a Hangul, kana or CJK syllable."""
+    """Whether every letter of ``text`` is a Hangul, kana, CJK or Devanagari syllable.
+
+    Devanagari vowel signs and the virama are combining marks, not letters, so
+    a piece such as "छो" or "र्ड" counts by its consonants.
+    """
 
     letters = [char for char in text if char.isalnum()]
     return bool(letters) and all(_SYLLABIC_CHARS.match(char) for char in letters)
@@ -190,7 +195,11 @@ class _SpokenTranscript:
         Korean, Japanese and Chinese are timed a syllable at a time ("확",
         "인", "해" for "확인해"). Holding one piece joined only two-syllable
         words, so a Korean line's text stalled at its first longer word. A
-        syllable therefore matches in place (see _match).
+        syllable therefore matches in place (see _match). Hindi is timed the
+        same way ("ए", "क" for "एक"; "छो", "टी" for "छोटी"), sometimes with a
+        word's last syllable after the next word's first ("छो", "सी", "बा",
+        "टी", "त" for "छोटी सी बात"); a syllable behind the text matches
+        nothing and the next one continues.
         """
 
         needle = _unescape(word).strip().lower()

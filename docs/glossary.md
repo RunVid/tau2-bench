@@ -46,10 +46,11 @@ The public name for the τ-i18n measure that papers, data and code call
 **Experience** (`experience`). An agent utterance has an issue when the
 naturalness or the speech-fidelity judge flagged it. The paper reports the
 share of aligned utterances without an issue. Voice-v2 packages score it per
-call (`voice-v2-experience-call-v1`, in `benchmark-quality.json`): a call
+call (`voice-v2-experience-call-v2`, in `benchmark-quality.json`): a call
 passes when at most 25% of its eligible agent utterances have an issue. It is
 *unscored*, never failed, unless both judges returned complete verdicts that
-pair every utterance. The leaderboard shows it as Generation quality and rates
+pair every utterance. Live speech recorded without a transcript is a recording
+gap: those utterances are left out and the rest of the call is scored. The leaderboard shows it as Generation quality and rates
 it as passed / (passed + failed). Keys such as `experience` and the paper's
 `experience.json` keep the old name.
 

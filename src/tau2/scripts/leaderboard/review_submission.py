@@ -40,6 +40,7 @@ import argparse
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from urllib.request import urlopen
 
@@ -75,6 +76,8 @@ from tau2.scripts.leaderboard.verify_trajectories import (
     VerificationMode,
     verify_single_file,
 )
+from tau2.scripts.leaderboard.viewer_data import sync as sync_viewer_tree
+from tau2.scripts.leaderboard.viewer_data import viewer_cell_dir, write_viewer_cell
 from tau2.scripts.leaderboard.voice_v2_publication import (
     validate_historical_package,
 )
@@ -264,6 +267,28 @@ def _run_aws(cmd: list[str], profile: str, console: Console) -> bool:
     return True
 
 
+def _upload_viewer_cells(
+    submission_dir: Path,
+    trajectory_files: list[str],
+    trajectory_map: dict[str, str],
+    profile: str,
+    console: Console,
+) -> None:
+    """Split a text submission's trajectory files into viewer cells and sync them."""
+    with tempfile.TemporaryDirectory() as staging:
+        for path_str, domain in zip(trajectory_files, trajectory_map):
+            cell = (
+                Path(staging)
+                / submission_dir.name
+                / TRAJECTORY_FILES_DIR_NAME
+                / viewer_cell_dir(domain)
+            )
+            count = write_viewer_cell(json.loads(Path(path_str).read_bytes()), cell)
+            console.print(f"  {domain}: {count} simulations")
+        # The staging dir holds only this submission's text cells.
+        sync_viewer_tree(Path(staging), profile, dry_run=False)
+
+
 def _upload(
     submission_dir: Path,
     trajectory_files: list[str],
@@ -300,6 +325,21 @@ def _upload(
                 ["s3", "cp", path_str, s3_dest],
                 profile,
                 console,
+            )
+
+        # The visualizer reads text trajectories split per simulation, next
+        # to the monolithic files (which stay the download). A failure here
+        # leaves the visualizer on the monolithic files, so it must not stop
+        # submission.json from being uploaded.
+        console.print("\n[bold]Uploading viewer cells to S3...[/bold]")
+        try:
+            _upload_viewer_cells(
+                submission_dir, trajectory_files, trajectory_map, profile, console
+            )
+        except Exception as error:
+            console.print(
+                f"[yellow]Viewer cell upload failed ({error}); rerun "
+                "`viewer_data split` + `upload` for this submission.[/yellow]"
             )
 
     console.print("\n[bold]Uploading submission.json to S3...[/bold]")

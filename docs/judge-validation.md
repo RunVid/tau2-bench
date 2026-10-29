@@ -24,7 +24,7 @@ gender-agreement diagnostic.
 | Language diagnostics v15 / rubric v19 | Counting units (es, pt, zh), register (pt), gender agreement (pt, female agent), name/address conventions (hi), honorific agreement (ko), modal particles (zh) |
 | Hindi gender v16 / rubric v26 | Gender agreement with a male agent and recorded caller gender |
 | Tool use v7 / rubric v4 | Combined tool errors, authentication arguments and tool parameters across all six languages |
-| Speech fidelity v6 | Audio fidelity across all six languages |
+| Speech fidelity v7, validation pending | Audio fidelity across all six languages |
 
 Naturalness v17 renamed the v16 factor identifier from `natural_word_choice` to
 `naturalness`. Rubric v21 now selects the exact language-specific wording in the
@@ -36,6 +36,17 @@ The catalog's source hash still identifies the original validation archive, not
 validation evidence for v21. The catalog records the exception in
 `unvalidated_contract_ids`; authoring lists the five reviewed candidates rather
 than presenting this runtime selection as a validated source.
+
+Speech fidelity v7 keeps the v6 model, prompt, rubric and decision rule. It
+asks the provider for a reply constrained to the findings schema the judge
+parses (closed categories, severity 1-3, at most eight findings) and lowers the
+output cap from 32,768 to 8,192 tokens. On a small share of clips, often
+digit-by-digit IDs and Mandarin homophones, the judge keeps second-guessing a
+word until it reaches its output limit. Each such clip leaves its call
+unscored until it is judged again. The schema keeps the reply parseable and the
+cap bounds what one such clip costs. Like v6, v7 has no held-out human
+validation and is listed in `unvalidated_contract_ids`. Its new contract and
+catalog revisions keep v6 verdicts from being reused.
 
 ### Benchmark-authored speech
 

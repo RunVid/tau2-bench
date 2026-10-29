@@ -23,7 +23,7 @@ from tau2.data_model.transcript import LiveTranscriptFragment, LiveTranscriptTic
 from tau2.judges.catalog import load_catalog
 from tau2.judges.cli import add_judges_args
 from tau2.judges.run_evidence import SavedRun, progress_path
-from tau2.judges.suite import plan_suite
+from tau2.judges.suite import JudgeExecutionConfig, plan_suite
 from tau2.judges.summary import build_export as export_run
 from tau2.runner.helpers import get_info
 
@@ -159,6 +159,11 @@ def build_export(options):
         trials=options.trials,
         force=getattr(options, "force", False),
         execute=options.judge_command == "suite" and not options.dry_run,
+        execution=JudgeExecutionConfig(
+            unit_retries=getattr(
+                options, "unit_retries", JudgeExecutionConfig().unit_retries
+            )
+        ),
     )
 
 
@@ -379,10 +384,12 @@ def test_saved_production_naturalness_errors_resume_and_cached_success(
         )
 
     monkeypatch.setattr("tau2.judges.criteria.generate", generate)
-    report = build_export(args("suite", str(saved_run), "--only", "naturalness"))
+    # Without in-run retries the failed unit stays recorded for the next run.
+    no_retry = ("--only", "naturalness", "--unit-retries", "0")
+    report = build_export(args("suite", str(saved_run), *no_retry))
     assert report.summary[0].error_calls == 1
     assert report.summary[0].judged_calls == 1
-    report = build_export(args("suite", str(saved_run), "--only", "naturalness"))
+    report = build_export(args("suite", str(saved_run), *no_retry))
     assert len(calls) == 3
     assert report.summary[0].complete
     assert report.summary[0].observed_pass_fraction == 1
@@ -391,6 +398,49 @@ def test_saved_production_naturalness_errors_resume_and_cached_success(
     assert all_source_bytes(saved_run) == before
     assert all(call["model"] == "gpt-5.5" for call in calls)
     assert all(call["reasoning_effort"] == "xhigh" for call in calls)
+
+
+def test_a_failed_reply_is_asked_again_in_the_same_suite_run(saved_run, monkeypatch):
+    from types import SimpleNamespace
+
+    from tau2.data_model.message import AssistantMessage, UserMessage
+
+    results = Results.load(saved_run)
+    for simulation in results.simulations:
+        simulation.messages = [
+            UserMessage(role="user", content="Pode ajudar?"),
+            AssistantMessage(role="assistant", content="Claro, posso ajudar."),
+        ]
+    results.save(saved_run, format="dir" if saved_run.is_dir() else "json")
+    calls = []
+
+    def generate(**kwargs):
+        calls.append(kwargs)
+        if len(calls) == 1:
+            return SimpleNamespace(content='{"results": []}')
+        return SimpleNamespace(
+            content=json.dumps(
+                {
+                    "results": [
+                        {
+                            "factor_id": "naturalness",
+                            "opportunity": True,
+                            "violated": False,
+                            "severity": 0,
+                            "reasoning": "Natural phrasing.",
+                            "quote": "",
+                        }
+                    ]
+                }
+            )
+        )
+
+    monkeypatch.setattr("tau2.judges.criteria.generate", generate)
+    report = build_export(args("suite", str(saved_run), "--only", "naturalness"))
+    assert len(calls) == 3
+    assert report.summary[0].complete
+    assert report.summary[0].error_calls == 0
+    assert all(call["model"] == "gpt-5.5" for call in calls)
 
 
 def test_evidence_reader_is_lazy_and_reuses_metadata(saved_run, monkeypatch):

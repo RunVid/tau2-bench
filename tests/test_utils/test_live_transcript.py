@@ -447,7 +447,7 @@ def test_judges_skip_only_uncaptioned_live_group(tmp_path, monkeypatch, measure)
     adapter = "fidelity" if measure == "speech_fidelity" else "criteria"
     monkeypatch.setattr(f"tau2.judges.{adapter}.generate", generate)
     contract_id = (
-        "speech-fidelity-v6"
+        "speech-fidelity-v7"
         if measure == "speech_fidelity"
         else "naturalness-v17-rubric-v21-language-specific-draft2"
     )
@@ -486,7 +486,7 @@ def test_all_uncaptioned_audio_remains_unjudged(tmp_path, monkeypatch):
         "tau2.judges.fidelity.generate", lambda **kw: pytest.fail("No reference")
     )
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     result = FidelityJudge(contract).evaluate(
         RunEvidence(

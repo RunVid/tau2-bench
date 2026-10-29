@@ -17,12 +17,14 @@ A flag is unknown (``None``) when the call has no opportunity or no usable
 verdict. A call fails when at least two known flags are 1, passes when even
 setting every unknown flag to 1 cannot reach two, and is otherwise unscored.
 
-**Experience** (``voice-v2-experience-call-v1``): an eligible agent utterance
+**Experience** (``voice-v2-experience-call-v2``): an eligible agent utterance
 has an issue when the ``naturalness`` or ``speech_fidelity`` judge flagged it.
 A call passes when at most 25% of its eligible utterances have an issue. It is
-unscored, never failed, unless both verdicts are complete (no whole-call or unit
-errors, including missing-Live-transcript units) and every eligible naturalness
-utterance pairs with a fidelity unit.
+unscored, never failed, unless both verdicts are complete and every eligible
+naturalness utterance pairs with a fidelity unit. A verdict is complete when it
+has no whole-call error and no unit errors other than input errors: Live
+speech recorded without a transcript is a recording gap, so those utterances
+are left out, as in the judge diagnostics. v1 left the whole call unscored.
 """
 
 from enum import StrEnum
@@ -33,7 +35,7 @@ from tau2.data_model.simulation import SimulationRun
 from tau2.metrics.interaction_quality import InteractionMeasurements
 
 INTERACTION_VERSION = "voice-v2-interaction-call-v1"
-EXPERIENCE_VERSION = "voice-v2-experience-call-v1"
+EXPERIENCE_VERSION = "voice-v2-experience-call-v2"
 INTERACTION_COMPONENTS = (
     "nonresponse",
     "interruption",
@@ -137,7 +139,7 @@ def _complete(verdict: StoredVerdict | None) -> bool:
         verdict is not None
         and verdict.error is None
         and verdict.verdict is not None
-        and not verdict.verdict.unit_errors
+        and all(error.kind == "input" for error in verdict.verdict.unit_errors)
     )
 
 
@@ -146,7 +148,8 @@ def experience_counts(
 ) -> tuple[int, int | None]:
     """Eligible utterances and utterances with an issue (None if unpaired).
 
-    Eligible utterances are the naturalness units with an opportunity.
+    Eligible utterances are the naturalness units with an opportunity; units
+    with an input error (no Live transcript) are not units and stay out.
     """
     naturalness = verdicts.get("naturalness")
     fidelity = verdicts.get("speech_fidelity")

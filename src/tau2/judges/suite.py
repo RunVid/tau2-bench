@@ -12,7 +12,11 @@ from typing import Annotated
 from loguru import logger
 from pydantic import BaseModel, Field, ValidationError
 
-from tau2.config import DEFAULT_JUDGE_CONCURRENCY, DEFAULT_JUDGE_PROCESSES
+from tau2.config import (
+    DEFAULT_JUDGE_CONCURRENCY,
+    DEFAULT_JUDGE_PROCESSES,
+    DEFAULT_JUDGE_UNIT_RETRIES,
+)
 from tau2.data_model.judges import (
     DiagnosticId,
     ImplementationFamily,
@@ -44,6 +48,14 @@ class JudgeExecutionConfig(BaseModel):
     retry_errors: Annotated[
         bool, Field(description="Retry matching stored judge errors and partials.")
     ] = True
+    unit_retries: Annotated[
+        int,
+        Field(
+            ge=0,
+            description="Further attempts, in the same run, at units whose judge "
+            "reply was incomplete or invalid.",
+        ),
+    ] = DEFAULT_JUDGE_UNIT_RETRIES
 
 
 class JudgeJob(BaseModel):
@@ -60,6 +72,7 @@ class JudgeShard(BaseModel):
     catalog: JudgeCatalog
     jobs: list[JudgeJob]
     concurrency: int = Field(ge=1)
+    unit_retries: int = Field(default=0, ge=0)
 
 
 class JudgeWorkerMessage(BaseModel):
@@ -217,6 +230,60 @@ def _save_verdicts(path: Path, rows: list[StoredVerdict]) -> None:
     temporary.replace(path)
 
 
+def _check_resumed(previous: MeasureVerdict, response: MeasureVerdict) -> None:
+    """A resumed verdict keeps the units it was given and every successful one."""
+    if not isinstance(response, MeasureVerdict):
+        raise TypeError("Judge must return a typed MeasureVerdict")
+    before_ids = {u.unit_id for u in [*previous.units, *previous.unit_errors]}
+    after_ids = {u.unit_id for u in [*response.units, *response.unit_errors]}
+    if before_ids != after_ids:
+        raise ValueError("Partial retry changed diagnostic unit coverage")
+    retained = {u.unit_id: u for u in response.units}
+    if any(retained.get(u.unit_id) != u for u in previous.units):
+        raise ValueError("Partial retry changed or dropped a successful unit")
+
+
+def _retry_failed_replies(
+    item: PlannedVerdict,
+    contract: JudgeContract,
+    verdict: MeasureVerdict,
+    resume_backend: Callable[
+        [JudgeInput, JudgeContract, str, MeasureVerdict], MeasureVerdict
+    ]
+    | None,
+    attempts: int,
+) -> MeasureVerdict:
+    """Ask again, in the same run, for units whose judge reply failed.
+
+    A judge reply can fail by chance: a model that keeps deliberating until it
+    reaches its output limit, or a reply its schema rejects, usually succeeds
+    when asked again. One such unit leaves its whole call unscored, so each
+    further attempt goes through the judge's own resume, which keeps every
+    successful unit and asks only for the failed ones under the same contract:
+    the verdict is the one a later ``tau2 judges suite`` would record. Input
+    errors (missing evidence) are not retried, judges without resume support are
+    left as they are, and a retry that itself fails keeps the last verdict.
+    """
+    for attempt in range(1, attempts + 1):
+        if resume_backend is None or not any(
+            error.kind == "response" for error in verdict.unit_errors
+        ):
+            break
+        try:
+            retried = resume_backend(item.input, contract, item.measure, verdict)
+            _check_resumed(verdict, retried)
+        except NotImplementedError:
+            break
+        except Exception as exc:
+            logger.warning(
+                f"Retry {attempt} of {item.measure} for {item.input.simulation_id} "
+                f"failed: {type(exc).__name__}: {exc}"
+            )
+            break
+        verdict = retried
+    return verdict
+
+
 def _evaluate_job(
     job: JudgeJob,
     contracts: dict[str, JudgeContract],
@@ -225,6 +292,7 @@ def _evaluate_job(
         [JudgeInput, JudgeContract, str, MeasureVerdict], MeasureVerdict
     ]
     | None,
+    unit_retries: int = 0,
 ) -> StoredVerdict:
     """Evaluate one planned measure while preserving any successful prior units."""
     item, previous = job.item, job.previous
@@ -244,26 +312,18 @@ def _evaluate_job(
             "Partial verdicts require a resume backend to preserve successful units"
         )
     try:
+        contract = contracts[item.identity.contract_id]
         if partial is not None:
             assert resume_backend is not None
-            response = resume_backend(
-                item.input, contracts[item.identity.contract_id], item.measure, partial
-            )
-            if not isinstance(response, MeasureVerdict):
-                raise TypeError("Judge must return a typed MeasureVerdict")
-            before_ids = {u.unit_id for u in [*partial.units, *partial.unit_errors]}
-            after_ids = {u.unit_id for u in [*response.units, *response.unit_errors]}
-            if before_ids != after_ids:
-                raise ValueError("Partial retry changed diagnostic unit coverage")
-            retained = {u.unit_id: u for u in response.units}
-            if any(retained.get(u.unit_id) != u for u in partial.units):
-                raise ValueError("Partial retry changed or dropped a successful unit")
+            response = resume_backend(item.input, contract, item.measure, partial)
+            _check_resumed(partial, response)
         else:
-            response = backend(
-                item.input, contracts[item.identity.contract_id], item.measure
-            )
+            response = backend(item.input, contract, item.measure)
         if not isinstance(response, MeasureVerdict):
             raise TypeError("Judge must return a typed MeasureVerdict")
+        response = _retry_failed_replies(
+            item, contract, response, resume_backend, unit_retries
+        )
         return StoredVerdict(identity=item.identity, verdict=response)
     except Exception as exc:
         if partial is not None:
@@ -302,12 +362,15 @@ def execute_suite(
         [JudgeInput, JudgeContract, str, MeasureVerdict], MeasureVerdict
     ]
     | None = None,
+    unit_retries: int = 0,
 ) -> SuitePlan:
     """Resume typed saved diagnostics, checkpointing each call/measure independently.
 
-    The supplied judge returns a typed verdict without serialization. Failures are persisted
-    and a later invocation retries them. Ordinary task rewards are never read or
-    changed by this operation.
+    The supplied judge returns a typed verdict without serialization. Units whose
+    reply failed are asked again up to ``unit_retries`` times through
+    ``resume_backend``; failures still left are persisted and a later invocation
+    retries them. Ordinary task rewards are never read or changed by this
+    operation.
     """
     stored = read_verdicts(path)
     plan = plan_suite(inputs, catalog, stored, only=only, trials=trials, force=force)
@@ -332,6 +395,7 @@ def execute_suite(
             contracts,
             backend,
             resume_backend,
+            unit_retries,
         )
         existing[_key(item.input, item.measure)] = saved
         _save_verdicts(path, list(existing.values()))
@@ -368,7 +432,14 @@ def _run_judge_shard(payload: str, result_queue: multiprocessing.Queue) -> None:
 
         with ThreadPoolExecutor(max_workers=shard.concurrency) as executor:
             futures = [
-                executor.submit(_evaluate_job, job, contracts, evaluate, evaluate)
+                executor.submit(
+                    _evaluate_job,
+                    job,
+                    contracts,
+                    evaluate,
+                    evaluate,
+                    shard.unit_retries,
+                )
                 for job in shard.jobs
             ]
             for future in as_completed(futures):
@@ -430,6 +501,7 @@ def execute_suite_parallel(
                     catalog=catalog,
                     jobs=jobs,
                     concurrency=execution.concurrency,
+                    unit_retries=execution.unit_retries,
                 ).model_dump_json(),
                 result_queue,
             ),
@@ -562,6 +634,7 @@ def judge_saved_run(
             retry_errors=execution.retry_errors,
             backend=evaluate,
             resume_backend=evaluate,
+            unit_retries=execution.unit_retries,
         )
     stored = read_verdicts(path)
     plan = plan_suite(

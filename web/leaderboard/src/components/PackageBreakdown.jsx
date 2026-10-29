@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { heatScale, percent } from '../data/multilingual/metrics'
 import { CORE_DOMAINS, LANGUAGES, PASS3_DOMAINS, domainScore, interactionComponent, loadDiagnostics, packageQuality, qualityCounts, toPercent } from '../data/voiceV2Packages'
+import { COMPONENT_NAMES, MEASURE_NAMES } from '../data/voiceV2Rows'
 import './MultilingualVoice.css'
 
 // Breakdown of one submitted voice-v2 package and any banking or entity
@@ -8,10 +9,10 @@ import './MultilingualVoice.css'
 // leaderboard (MultilingualVoice).
 const languageName = Object.fromEntries(LANGUAGES.map(item => [item.id, item.name]))
 const tabs = [['task', 'Task completion'], ['interaction', 'Interaction'], ['experience', 'Generation quality']]
-const componentName = { nonresponse: 'Non-response', interruption: 'Interruptions', selectivity: 'Selectivity errors', monologue: 'Monologues', tool_misuse: 'Tool-use errors' }
+const componentName = COMPONENT_NAMES
 const domainName = { airline: 'Airline', retail: 'Retail', telecom: 'Telecom', banking_knowledge: 'Banking', intake: 'Intake' }
 const extraDomains = ['banking_knowledge', 'intake']
-const measureName = { naturalness: 'Naturalness', speech_fidelity: 'Speech fidelity' }
+const measureName = MEASURE_NAMES
 const label = (names, key) => names[key] || key.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase())
 
 // Pool each judged measure's units over the cells of one language (or all).
@@ -116,7 +117,7 @@ export default function PackageBreakdown({ pkg, metric = 'task', onMetricChange,
     {metric === 'experience' && diagnostics && <Heatmap title="Generation quality judges" rowLabel="Judge" rows={judgeRows} columns={columns} note="Share of judged utterances without an issue · higher is better" />}
     <div className="mv-factor-notes">
       {metric === 'interaction' && pkg.quality && <p className="mv-footnote">A call fails Interaction with two or more of the five failures: no response, more than three interruptions, more than three selectivity errors, a monologue, or a tool-use error. It passes when it could not reach two even if every unknown check failed; otherwise it is unscored. {overall('interaction').unscored + overall('interaction').excluded} of {Object.values(overall('interaction')).reduce((a, b) => a + b, 0)} calls are unscored or excluded.</p>}
-      {metric === 'experience' && pkg.quality && <p className="mv-footnote">A call passes Generation quality when at most 25% of the agent’s judged utterances have a naturalness or speech-fidelity issue. Calls with incomplete judgments are unscored. {overall('experience').unscored + overall('experience').excluded} of {Object.values(overall('experience')).reduce((a, b) => a + b, 0)} calls are unscored or excluded.</p>}
+      {metric === 'experience' && pkg.quality && <p className="mv-footnote">A call passes Generation quality when at most 25% of the agent’s judged utterances have a naturalness or speech-fidelity issue. Utterances recorded without a transcript are left out; calls with other incomplete judgments are unscored. {overall('experience').unscored + overall('experience').excluded} of {Object.values(overall('experience')).reduce((a, b) => a + b, 0)} calls are unscored or excluded.</p>}
     </div>
   </div>
 }

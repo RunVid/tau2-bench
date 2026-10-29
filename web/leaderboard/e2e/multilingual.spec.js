@@ -36,7 +36,7 @@ const submission = score => {
 // Each cell has 50 calls; `pass(l, d)` scored calls pass, two are unscored.
 const quality = (interactionPass, experiencePass) => ({
   schema_version: 'benchmark-quality-v1', benchmark_version: 'voice-v2', frame_revision: 'voice-v2-rev',
-  interaction_version: 'voice-v2-interaction-call-v1', experience_version: 'voice-v2-experience-call-v1',
+  interaction_version: 'voice-v2-interaction-call-v1', experience_version: 'voice-v2-experience-call-v2',
   cells: languages.flatMap((language, l) => domains.map((domain, d) => ({
     language, domain,
     interaction: { passed: interactionPass(l, d), failed: 48 - interactionPass(l, d), unscored: 2, excluded: 0 },
@@ -46,7 +46,7 @@ const quality = (interactionPass, experiencePass) => ({
   }))),
 })
 const packages = {
-  fixture_a: { metadata: metadata('alpha-live', 'Alpha Labs', 'openai'), submission: submission((l, d) => (60 + 2 * l + 5 * d) / 100), quality: quality((l, d) => 30 + l + d, (l, d) => 40 - l) },
+  fixture_a: { metadata: metadata('alpha-live', 'Alpha Labs', 'openai'), submission: submission((l, d) => (60 + 2 * l + 5 * d) / 100), quality: quality((l, d) => 30 + l + d, l => 40 - l) },
   fixture_b: { metadata: metadata('beta-live', 'Beta AI', 'gemini'), submission: submission((l, d) => (50 + l + d) / 100), quality: quality(() => 44, (l, d) => 20 + d) },
   fixture_c: { metadata: metadata('gamma-live', 'Gamma Inc', 'xai'), submission: submission(() => 0.4), quality: null },
   fixture_custom: { metadata: metadata('delta-live', 'Delta', 'xai', 'custom'), submission: submission(() => 0.9), quality: null },

@@ -154,6 +154,41 @@ accepts only the verified `runtime_rules_sha256` digests in
 `ACCEPTED_RUNTIME_RULES` (`voice_v2_publication.py`). Never extend that
 allowlist without verifying the source diff it covers.
 
+## Trajectory visualizer data
+
+The visualizer (`/trajectory-visualizer`) lists submissions from
+`visualizer-index.json`, generated at build time from the manifest and the
+committed metadata (`web/leaderboard/scripts/generate-visualizer-index.mjs`).
+It then loads a cell's small `results.json` index and fetches one
+`simulations/<id>.json` per opened conversation.
+
+Text submissions upload one monolithic file per domain; `review_submission
+--upload` also uploads it split into `trajectories/<domain>/` (gzipped, with
+caching headers). For submissions uploaded before that:
+
+```bash
+# Stage (gzipped) under a local directory; skips cells already staged
+python -m tau2.scripts.leaderboard.viewer_data split --staging ~/.cache/tau2/viewer-staging \
+    [<submission> ...]
+
+# Preview locally: serves staged files, proxies the rest from S3
+node web/leaderboard/scripts/serve-submissions.mjs
+VITE_SUBMISSIONS_BASE_URL=http://localhost:8787/submissions npm run dev --prefix web/leaderboard
+
+# Upload with Content-Encoding: gzip
+python -m tau2.scripts.leaderboard.viewer_data upload --staging ~/.cache/tau2/viewer-staging \
+    --aws-profile tau-bench-ci [--dry-run]
+```
+
+A text cell without the split layout still works: the visualizer falls back
+to the monolithic file.
+
+Voice cells are already saved in this layout. Never re-upload them: an
+overwritten run cannot be recovered from S3, and `aws s3 sync` and Python
+readers (`Results.load`) do not decode `Content-Encoding: gzip`. `upload`
+refuses a staging tree holding anything other than text submissions' viewer
+cells, and its sync never deletes.
+
 ## Manual S3 Commands
 
 If you need to do things manually:

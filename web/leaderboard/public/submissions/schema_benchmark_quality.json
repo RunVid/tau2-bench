@@ -320,8 +320,8 @@
       "type": "string"
     },
     "experience_version": {
-      "const": "voice-v2-experience-call-v1",
-      "default": "voice-v2-experience-call-v1",
+      "const": "voice-v2-experience-call-v2",
+      "default": "voice-v2-experience-call-v2",
       "title": "Experience Version",
       "type": "string"
     },

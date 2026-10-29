@@ -3,7 +3,7 @@
   "benchmark_version": "voice-v2",
   "frame_revision": "regional-release-data-v16",
   "interaction_version": "voice-v2-interaction-call-v1",
-  "experience_version": "voice-v2-experience-call-v1",
+  "experience_version": "voice-v2-experience-call-v2",
   "cells": [
     {
       "language": "en",
@@ -15,9 +15,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 37,
-        "failed": 11,
-        "unscored": 2,
+        "passed": 38,
+        "failed": 12,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -305,9 +305,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 17,
-          "experience_issues": null
+          "experience_issues": 7
         },
         {
           "simulation_id": "762bf4e2-5b8e-4a13-b18a-554d87bbbc68",
@@ -487,9 +487,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 11,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "b17dc23f-79e0-47db-b4a0-91b430e9cb7b",
@@ -755,9 +755,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 33,
+        "passed": 38,
         "failed": 11,
-        "unscored": 6,
+        "unscored": 1,
         "excluded": 0
       },
       "interaction_components": {
@@ -793,9 +793,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 16,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "045d1295-98c5-42a6-b08a-36cd6fbbf843",
@@ -835,9 +835,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "14ebf746-fb7f-4e97-aa3a-dcbd880f0c42",
@@ -1311,9 +1311,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 9,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "b0daa932-2d29-49b2-ae53-8967d8692b26",
@@ -1409,9 +1409,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 16,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "d269517d-4eba-4ea5-a388-17edba0b340f",
@@ -1465,9 +1465,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 13,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "f4436f96-b4c7-4ead-bd73-f90ce1c3377c",
@@ -1495,9 +1495,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 41,
-        "failed": 5,
-        "unscored": 4,
+        "passed": 44,
+        "failed": 6,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -1799,9 +1799,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "62bbda7a-1d28-496f-b7a7-c027bfdc3e1b",
@@ -1897,9 +1897,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 33,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "89b518b5-6775-4524-8459-711c6df93949",
@@ -1967,9 +1967,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 4,
-          "experience_issues": null
+          "experience_issues": 0
         },
         {
           "simulation_id": "ab0c910a-bebb-41c4-8405-ebf0325ee72c",
@@ -2065,9 +2065,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 38,
-          "experience_issues": null
+          "experience_issues": 13
         },
         {
           "simulation_id": "ce1c1344-fcb9-4ee3-b0a0-f8b91dc45440",
@@ -2235,9 +2235,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 25,
-        "failed": 19,
-        "unscored": 6,
+        "passed": 28,
+        "failed": 22,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -2273,9 +2273,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "0388917f-0375-4475-b9ce-758b8e557d3f",
@@ -2371,9 +2371,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 11,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "28aa014a-a150-4a45-9afb-9f0b249644cf",
@@ -2525,9 +2525,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 25,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "6199ba7d-56fb-4e7a-a45c-bab3163f2c66",
@@ -2567,9 +2567,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 28,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "704211a3-0a11-4650-95ea-1e4a40e6e25e",
@@ -2861,9 +2861,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 22,
-          "experience_issues": null
+          "experience_issues": 9
         },
         {
           "simulation_id": "e465c71b-8d70-440e-b272-67b8dc73506d",
@@ -2931,9 +2931,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 16,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "f9f175ca-e53f-49da-9bba-5f3e49fd070f",
@@ -2975,9 +2975,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 27,
-        "failed": 20,
-        "unscored": 3,
+        "passed": 28,
+        "failed": 22,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -3181,9 +3181,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 7,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "40183adb-4024-4702-9d20-b4b1b49ab263",
@@ -3447,9 +3447,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 19,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "a17537ac-ee42-4a55-a25f-9178a3552477",
@@ -3629,9 +3629,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 4,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "ea1a6b5c-cda8-4629-8a34-43b72c02cfd9",
@@ -3715,9 +3715,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 33,
-        "failed": 8,
-        "unscored": 9,
+        "passed": 41,
+        "failed": 9,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -3823,9 +3823,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 12,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "31e71d15-e777-4440-b527-47bbddda3ff7",
@@ -3963,9 +3963,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 20,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "5986e813-2070-4e1a-964f-ca1eb9638ed0",
@@ -4117,9 +4117,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 24,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "95ab1fd5-b490-477c-82da-ebcf2da54bd7",
@@ -4145,9 +4145,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 24,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "96b4d54f-ea20-4331-ac54-9d1b36fa6fc1",
@@ -4229,9 +4229,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 36,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "b73ba35b-db47-4e56-94fb-3145599e9987",
@@ -4299,9 +4299,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 43,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "d2fdc3b3-660b-4356-ab79-c632501cc0da",
@@ -4341,9 +4341,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 10,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "e3d1415f-fb4d-457d-8ff3-8da7da34dabc",
@@ -4369,9 +4369,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 11,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "e6543c8d-bfb2-4572-bdfe-646bd3e9d1dc",
@@ -4397,9 +4397,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 49,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "ed969f56-967b-44f4-bb5c-db3e986fde9d",
@@ -4455,9 +4455,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 33,
-        "failed": 11,
-        "unscored": 6,
+        "passed": 36,
+        "failed": 13,
+        "unscored": 1,
         "excluded": 0
       },
       "interaction_components": {
@@ -4815,9 +4815,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 21,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "78269fa1-d368-46cd-8e4b-0d1b6bda4a3e",
@@ -4983,9 +4983,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 13,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "b8342406-8553-438f-a1e3-9140f8b2a5bb",
@@ -5081,9 +5081,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 0
         },
         {
           "simulation_id": "cd46bf83-9b92-494c-90ae-365411d6b9a8",
@@ -5123,9 +5123,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 12,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "e0b6ad2c-df72-4915-95fe-dbf50e2e668a",
@@ -5165,9 +5165,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 22,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "f531dd50-f72a-4fb3-9f67-1224eca2c6f6",
@@ -5195,9 +5195,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 35,
-        "failed": 8,
-        "unscored": 7,
+        "passed": 40,
+        "failed": 9,
+        "unscored": 1,
         "excluded": 0
       },
       "interaction_components": {
@@ -5289,9 +5289,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "1cc5cdc7-5c33-47aa-be3b-22c6746479a0",
@@ -5443,9 +5443,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "6d5ec4a3-2945-4071-981b-e21f62bef34b",
@@ -5597,9 +5597,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "a9a7ee51-5b8f-4098-b10d-5acddf6c1f4b",
@@ -5695,9 +5695,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 13,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "bbe6121c-0c95-4fdc-9d24-6c59a50caee3",
@@ -5835,9 +5835,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "df34bd89-e76a-44db-b9cc-f909f980fa9c",
@@ -5891,9 +5891,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 33,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "eecbadcf-13a1-44c3-b12c-459cad207335",
@@ -5935,9 +5935,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 42,
+        "passed": 46,
         "failed": 3,
-        "unscored": 5,
+        "unscored": 1,
         "excluded": 0
       },
       "interaction_components": {
@@ -6029,9 +6029,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 17,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "21c96ee6-023a-47f0-831a-7b9142fdfe94",
@@ -6113,9 +6113,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 44,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "38dc53c3-a3aa-4607-919d-25d8c79b8a1a",
@@ -6281,9 +6281,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 27,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "6f039d6c-c166-46b2-8dab-caf5edd8f848",
@@ -6547,9 +6547,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 24,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "e366282d-77d9-4a85-9d5b-36cdfbf6f3b5",
@@ -6675,9 +6675,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 8,
-        "failed": 31,
-        "unscored": 11,
+        "passed": 11,
+        "failed": 38,
+        "unscored": 1,
         "excluded": 0
       },
       "interaction_components": {
@@ -6741,9 +6741,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 11,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "1fcec956-7b8a-4101-9f74-323a4e07979d",
@@ -6797,9 +6797,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 29,
-          "experience_issues": null
+          "experience_issues": 13
         },
         {
           "simulation_id": "3f9fa668-9f0d-497a-b95a-c958780f2daa",
@@ -7007,9 +7007,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 12,
-          "experience_issues": null
+          "experience_issues": 7
         },
         {
           "simulation_id": "858f346d-89f3-4613-bbb6-0b96f69f6e29",
@@ -7021,9 +7021,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 16,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "86ba29b8-941e-465d-adb2-49be5cb9e732",
@@ -7049,9 +7049,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 6,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "9a6fd7b3-f538-4046-911b-fe1879b0b914",
@@ -7119,9 +7119,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 13,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "a6912c38-a9ed-4cf9-aa06-5e63f6d799d6",
@@ -7147,9 +7147,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 8,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "ab751c0f-fa5c-4c23-be38-c5c8ad647e76",
@@ -7301,9 +7301,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 13,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "d1979a36-c352-4b4a-b09d-5d98c0080bab",
@@ -7315,9 +7315,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 14,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "dab18b7b-1f12-4a44-9f35-5939b91026e7",
@@ -7385,9 +7385,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 11,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "fd264b4e-da08-439a-a461-30c8745cd97b",
@@ -7415,9 +7415,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 5,
-        "failed": 32,
-        "unscored": 13,
+        "passed": 7,
+        "failed": 43,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -7495,9 +7495,9 @@
             "monologue": 1,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 10,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "0ecf6206-0769-4a24-97f8-f71640714ac2",
@@ -7551,9 +7551,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 16,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "2b4d940d-1cca-4d1a-bc60-52ff80e464b3",
@@ -7565,9 +7565,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "2ed498f6-4896-4516-a9c2-7ca6eab338ab",
@@ -7621,9 +7621,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 10,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "388f75a7-f928-4c92-b2f0-47b00cd50c2b",
@@ -7649,9 +7649,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 16,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "3bca2af1-2fc4-4400-b564-ccbbf968cc75",
@@ -7705,9 +7705,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "58e03e96-b846-4f9f-a6f7-90c2233bf1a3",
@@ -7817,9 +7817,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "8ffddf03-87ae-4fbe-9f55-e9565fabfcf6",
@@ -7845,9 +7845,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 19,
-          "experience_issues": null
+          "experience_issues": 7
         },
         {
           "simulation_id": "a7dc2c7f-2b94-415a-b077-73d044a1fdcf",
@@ -7887,9 +7887,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "b2673c2c-5071-49b1-9448-aebeeb61c73c",
@@ -7943,9 +7943,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 30,
-          "experience_issues": null
+          "experience_issues": 9
         },
         {
           "simulation_id": "bfddd6a9-1abf-4020-8485-395d46d05366",
@@ -7957,9 +7957,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 17,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "c0cdd745-abce-493a-a1ab-0e52b8047367",
@@ -8069,9 +8069,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 24,
-          "experience_issues": null
+          "experience_issues": 12
         },
         {
           "simulation_id": "e708fd70-cfbe-4cf2-aed3-9ee2549a7278",
@@ -8125,9 +8125,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 10,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "f6a9e13d-968e-418c-8e74-b2b2970f2fc3",
@@ -8155,9 +8155,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 21,
-        "failed": 14,
-        "unscored": 14,
+        "passed": 25,
+        "failed": 24,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -8249,9 +8249,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 22,
-          "experience_issues": null
+          "experience_issues": 9
         },
         {
           "simulation_id": "101b0e7f-e09d-474e-90ed-12aae5b37069",
@@ -8333,9 +8333,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 22,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "31606593-32cf-414c-a56f-99204e807e68",
@@ -8347,9 +8347,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 31,
-          "experience_issues": null
+          "experience_issues": 13
         },
         {
           "simulation_id": "38012f98-10a3-493e-876a-1422968f7a35",
@@ -8361,9 +8361,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 30,
-          "experience_issues": null
+          "experience_issues": 11
         },
         {
           "simulation_id": "39f663d1-3844-4a4d-a4c4-b2f4f01e36bc",
@@ -8389,9 +8389,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 44,
-          "experience_issues": null
+          "experience_issues": 15
         },
         {
           "simulation_id": "5785450c-3067-4373-a5c0-b193ce319ef7",
@@ -8431,9 +8431,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 20,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "5ef02906-4f10-4e94-8921-5122fa81087a",
@@ -8557,9 +8557,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 24,
-          "experience_issues": null
+          "experience_issues": 7
         },
         {
           "simulation_id": "836f03a1-20af-434c-99f3-ad7029b551e5",
@@ -8613,9 +8613,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 35,
-          "experience_issues": null
+          "experience_issues": 10
         },
         {
           "simulation_id": "973e8637-f48f-443f-8789-ca94b280610d",
@@ -8655,9 +8655,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 34,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "a8c6366c-0dcb-439f-a05f-870969fff665",
@@ -8711,9 +8711,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 14,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "c980789c-6d41-44e1-ae48-5c6551d4aaef",
@@ -8753,9 +8753,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 27,
-          "experience_issues": null
+          "experience_issues": 9
         },
         {
           "simulation_id": "d4a858c0-aa40-4e82-a3d4-407ebb66e0e6",
@@ -8795,9 +8795,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 17,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "e66af602-bb2e-4573-aed7-909836c138ce",
@@ -8837,9 +8837,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 28,
-          "experience_issues": null
+          "experience_issues": 9
         },
         {
           "simulation_id": "f5f1089b-3ade-4036-b40c-779926415d77",
@@ -8865,9 +8865,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 7,
-          "experience_issues": null
+          "experience_issues": 0
         }
       ]
     },
@@ -8881,9 +8881,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 19,
-        "failed": 21,
-        "unscored": 10,
+        "passed": 23,
+        "failed": 24,
+        "unscored": 3,
         "excluded": 0
       },
       "interaction_components": {
@@ -8933,9 +8933,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 9,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "13e16b67-d6ae-48ef-af8f-224732f5b421",
@@ -8961,9 +8961,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 8,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "1baae648-7d31-4a8a-bdbf-fb03eb862413",
@@ -9059,9 +9059,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 22,
-          "experience_issues": null
+          "experience_issues": 10
         },
         {
           "simulation_id": "4b60e02a-952f-4621-b340-e78cf7907c07",
@@ -9171,9 +9171,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 13,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "73906ca4-f1b2-4080-a652-f25452bd5cbc",
@@ -9255,9 +9255,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 27,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "8406b80c-ed0d-469b-a0ba-0a893c242545",
@@ -9493,9 +9493,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 21,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "d0df68e6-2698-4914-8254-bed5d1ac1059",
@@ -9549,9 +9549,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 20,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "de269da3-f501-4a75-8160-3179b8afec0c",
@@ -9621,9 +9621,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 24,
-        "failed": 17,
-        "unscored": 7,
+        "passed": 27,
+        "failed": 19,
+        "unscored": 2,
         "excluded": 0
       },
       "interaction_components": {
@@ -9771,9 +9771,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 8,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "37b8dd40-1c44-4667-b1c6-829b49368f50",
@@ -9841,9 +9841,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 9,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "40fd6c4f-1061-41fe-9131-df6cd69f3cd1",
@@ -9869,9 +9869,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "5135e1cb-02d8-4cdf-85ab-cd6162aae0c7",
@@ -9967,9 +9967,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 12,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "7875e0b5-1f1b-468b-8940-1f27430ba8a8",
@@ -10135,9 +10135,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 12,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "a9e88ecd-27f2-41fb-bae8-c613fe1ab428",
@@ -10333,9 +10333,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 21,
-        "failed": 9,
-        "unscored": 14,
+        "passed": 28,
+        "failed": 15,
+        "unscored": 1,
         "excluded": 0
       },
       "interaction_components": {
@@ -10441,9 +10441,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 46,
-          "experience_issues": null
+          "experience_issues": 15
         },
         {
           "simulation_id": "34a48afa-64bd-473e-a5c0-39133645fc5f",
@@ -10525,9 +10525,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 23,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "46455092-b5b8-400c-8563-33880fc9e5ac",
@@ -10567,9 +10567,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 26,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "6fb22e49-ac9f-443e-9632-223da9041db6",
@@ -10651,9 +10651,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 37,
-          "experience_issues": null
+          "experience_issues": 10
         },
         {
           "simulation_id": "840bae9a-fe88-4c12-996a-6025aafecca3",
@@ -10693,9 +10693,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 30,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "8c9aebe1-e949-44c1-8123-0a939d4b982b",
@@ -10707,9 +10707,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 19,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "8de9b1fd-a346-4293-950f-6ac70953d796",
@@ -10735,9 +10735,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 25,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "9852806d-ceac-4208-ade5-b963c3b3b09f",
@@ -10749,9 +10749,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 31,
-          "experience_issues": null
+          "experience_issues": 20
         },
         {
           "simulation_id": "a0a34db7-15cc-4770-bc31-fb6763a102de",
@@ -10777,9 +10777,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "abede495-3fb0-4480-b0ff-f62fed795efc",
@@ -10819,9 +10819,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "bd3e8b77-0966-4b9a-acd8-6a66c177e6ad",
@@ -10833,9 +10833,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 14,
-          "experience_issues": null
+          "experience_issues": 1
         },
         {
           "simulation_id": "c04b138d-f48c-4f28-93da-ec5f314ac24d",
@@ -10903,9 +10903,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 21,
-          "experience_issues": null
+          "experience_issues": 7
         },
         {
           "simulation_id": "e415d291-f150-462e-97f9-ccc619f21bc2",
@@ -10945,9 +10945,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 29,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "fa28ce98-7852-469a-83ea-c4b8c21280c8",
@@ -10989,9 +10989,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 19,
-        "failed": 24,
-        "unscored": 7,
+        "passed": 22,
+        "failed": 28,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -11195,9 +11195,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 20,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "5a5c21e0-7c6b-4c33-a274-540578ad66d1",
@@ -11237,9 +11237,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 15,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "6b59cc3d-e183-4fb7-8536-18b4624ec7f0",
@@ -11573,9 +11573,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "d6ba769e-cb3f-4cb9-afb0-e7213b367fe0",
@@ -11587,9 +11587,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 35,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "daecf3ea-40d7-454f-86fd-14d16283bf59",
@@ -11615,9 +11615,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 20,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "e01b7f5e-a43a-45c2-aac4-0792b9df90ed",
@@ -11657,9 +11657,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 19,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "e400285d-543d-42bd-91a8-84c5a3d17983",
@@ -11699,9 +11699,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 17,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "ecf076e0-b554-41c3-b83c-fdfac38bbe9f",
@@ -11729,9 +11729,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 20,
-        "failed": 20,
-        "unscored": 10,
+        "passed": 25,
+        "failed": 23,
+        "unscored": 2,
         "excluded": 0
       },
       "interaction_components": {
@@ -11809,9 +11809,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 11,
-          "experience_issues": null
+          "experience_issues": 2
         },
         {
           "simulation_id": "1fcfd7ba-3d3a-4fc2-8776-365984aacee0",
@@ -11837,9 +11837,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 22,
-          "experience_issues": null
+          "experience_issues": 3
         },
         {
           "simulation_id": "241332d7-11d6-4117-8a84-e2d44bbe7fd0",
@@ -11865,9 +11865,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 14,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "284a3733-b83e-45c8-a9aa-aa8af5e3098b",
@@ -11879,9 +11879,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 49,
-          "experience_issues": null
+          "experience_issues": 9
         },
         {
           "simulation_id": "2c46f0b6-d282-4a4a-87fa-92ea97884a5a",
@@ -11935,9 +11935,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 17,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "40eb3096-73fd-464f-a70a-7e8f1b85f9ca",
@@ -12061,9 +12061,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 20,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "7352df01-e8b8-4c93-bb0f-3f4386026cac",
@@ -12243,9 +12243,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 13,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "b4d0f663-feab-458d-b3be-d6d17c039060",
@@ -12439,9 +12439,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 25,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "f1e67b1a-5418-4057-a48c-e19840bae6a3",
@@ -12469,9 +12469,9 @@
         "excluded": 0
       },
       "experience": {
-        "passed": 29,
-        "failed": 9,
-        "unscored": 12,
+        "passed": 34,
+        "failed": 16,
+        "unscored": 0,
         "excluded": 0
       },
       "interaction_components": {
@@ -12605,9 +12605,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 24,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "25e9d85a-7e9e-4cc0-9e76-f3d85a1cb78d",
@@ -12633,9 +12633,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 32,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "2db49700-576e-4c56-8c86-ac095d5b3eff",
@@ -12647,9 +12647,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 32,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "33320fec-f54b-488e-ae08-04c21aab94a2",
@@ -12717,9 +12717,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 20,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "5ade9377-0f92-4b53-ba4c-c2b56a9c930d",
@@ -12815,9 +12815,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 36,
-          "experience_issues": null
+          "experience_issues": 11
         },
         {
           "simulation_id": "6faffb00-9c84-4783-b578-4d4ad04be8f5",
@@ -12899,9 +12899,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 24,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "8e252ee2-cdec-4916-9419-02e66b9b4b56",
@@ -12913,9 +12913,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 23,
-          "experience_issues": null
+          "experience_issues": 4
         },
         {
           "simulation_id": "96d75013-0575-4650-bad9-f04236d89554",
@@ -12941,9 +12941,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 33,
-          "experience_issues": null
+          "experience_issues": 6
         },
         {
           "simulation_id": "a2ad00e2-99c8-4af9-b565-be4d76b26cc3",
@@ -13067,9 +13067,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 19,
-          "experience_issues": null
+          "experience_issues": 9
         },
         {
           "simulation_id": "d3768751-85ea-4e2e-81a5-af0f7c32e628",
@@ -13081,9 +13081,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "pass",
           "experience_utterances": 44,
-          "experience_issues": null
+          "experience_issues": 8
         },
         {
           "simulation_id": "d9af21b0-3203-419c-b95d-c03261d7ecfe",
@@ -13095,9 +13095,9 @@
             "monologue": 0,
             "tool_misuse": 0
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 28,
-          "experience_issues": null
+          "experience_issues": 11
         },
         {
           "simulation_id": "da04aafb-21d0-4666-90c1-b24c324e8ac5",
@@ -13165,9 +13165,9 @@
             "monologue": 0,
             "tool_misuse": 1
           },
-          "experience": "unscored",
+          "experience": "fail",
           "experience_utterances": 18,
-          "experience_issues": null
+          "experience_issues": 5
         },
         {
           "simulation_id": "ef57427d-a5fc-4f8f-8e85-c944412bb95f",

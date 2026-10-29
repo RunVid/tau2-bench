@@ -12,7 +12,7 @@ from tau2.data_model.message import AssistantMessage, Tick
 from tau2.data_model.simulation import SimulationRun, TerminationReason
 from tau2.data_model.tasks import Task
 from tau2.judges.catalog import load_catalog
-from tau2.judges.fidelity import FidelityJudge, FidelityReply
+from tau2.judges.fidelity import FidelityJudge, FidelityReply, Finding
 from tau2.judges.run_evidence import RunEvidence, inspect_audio
 
 
@@ -77,6 +77,39 @@ def test_finding_category_is_required_and_closed():
         )
 
 
+def test_reply_schema_is_the_parsed_reply():
+    """The provider-enforced schema admits only replies the judge can parse."""
+    contract = next(
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
+    )
+    schema = contract.model_args["response_format"]["json_schema"]["schema"]
+    assert schema["required"] == list(FidelityReply.model_fields)
+    item = schema["properties"]["findings"]["items"]
+    assert set(item["required"]) == set(item["properties"]) == set(Finding.model_fields)
+    assert item["additionalProperties"] is False
+    categories = Finding.model_json_schema()["properties"]["category"]["enum"]
+    assert item["properties"]["category"]["enum"] == categories
+    severity = item["properties"]["severity"]
+    assert (severity["minimum"], severity["maximum"]) == (1, 3)
+
+
+def test_a_severity_zero_finding_is_the_rubrics_no_issue_answer():
+    """The rubric defines severity 0 as no clear issue, to be returned as an
+    empty list. A reply that still lists one failed validation, which left the
+    clip, and so its whole call, unjudged."""
+
+    clean = FidelityReply.model_validate({"findings": [finding(severity=0)]})
+    mixed = FidelityReply.model_validate(
+        {"findings": [finding(severity=0), finding(severity=2)]}
+    )
+
+    assert clean.findings == []
+    assert [f.severity for f in mixed.findings] == [2]
+    for severity in (-1, "0", None):
+        with pytest.raises(ValidationError):
+            FidelityReply.model_validate({"findings": [finding(severity=severity)]})
+
+
 @pytest.mark.parametrize("marker", ["###STOP###", "###TRANSFER###"])
 def test_control_marker_excludes_whole_audio_utterance(tmp_path, monkeypatch, marker):
     sim, _ = audio_fixture(tmp_path)
@@ -101,7 +134,7 @@ def test_control_marker_excludes_whole_audio_utterance(tmp_path, monkeypatch, ma
 
     monkeypatch.setattr("tau2.judges.fidelity.generate", generate)
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     result = FidelityJudge(contract).evaluate(
         RunEvidence(
@@ -143,7 +176,7 @@ def test_terminal_speech_clip_is_excluded(tmp_path, monkeypatch):
 
     monkeypatch.setattr("tau2.judges.fidelity.generate", generate)
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     result = FidelityJudge(contract).evaluate(
         RunEvidence(
@@ -179,7 +212,7 @@ def test_audio_digest_exact_model_and_filter(tmp_path, monkeypatch):
     evidence = inspect_audio(tmp_path, sim)
     assert evidence.sha256 and evidence.error is None
     c = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     result = FidelityJudge(c).evaluate(
         RunEvidence(
@@ -199,6 +232,7 @@ def test_audio_digest_exact_model_and_filter(tmp_path, monkeypatch):
     assert findings[1]["time_range"] == "3.0-3.5"
     assert seen[0]["call_name"] == "speech_fidelity_judge"
     assert seen[0]["model"] == "gemini/gemini-3.1-pro-preview"
+    assert seen[0]["response_format"]["type"] == "json_schema"
     assert seen[0]["messages"][1].audio_content
     system_prompt = seen[0]["messages"][0].content
     assert "Prefer precision over recall for speech fidelity." in system_prompt
@@ -242,7 +276,7 @@ def test_truncation_only_is_unscored_and_interruption_comes_from_recording(
 
     monkeypatch.setattr("tau2.judges.fidelity.generate", generate)
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     result = FidelityJudge(contract).evaluate(
         RunEvidence(
@@ -268,7 +302,7 @@ def test_missing_finding_category_is_a_unit_error(tmp_path, monkeypatch):
         lambda **kw: SimpleNamespace(content='{"findings":[{"issue":"tail"}]}'),
     )
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     result = FidelityJudge(contract).evaluate(
         RunEvidence(
@@ -292,7 +326,7 @@ def test_mandarin_tone_flip_stays_in_fidelity_prompt(tmp_path, monkeypatch):
 
     monkeypatch.setattr("tau2.judges.fidelity.generate", generate)
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     FidelityJudge(contract).evaluate(
         RunEvidence(
@@ -331,7 +365,7 @@ def test_fidelity_audio_reaches_completion_boundary(tmp_path, monkeypatch):
     monkeypatch.setattr(llm_utils, "completion", completion)
     monkeypatch.setattr(llm_utils, "get_response_cost", lambda _: 0)
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     FidelityJudge(contract).evaluate(
         RunEvidence(
@@ -367,7 +401,7 @@ def test_fidelity_retains_successes_and_retries_only_failed_clip(tmp_path, monke
     )
     monkeypatch.setattr("tau2.judges.fidelity.generate", lambda **kw: next(replies))
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     evidence = RunEvidence(
         simulation=sim,
@@ -404,7 +438,7 @@ def test_valid_json_at_output_limit_is_not_a_clean_verdict(tmp_path, monkeypatch
         ),
     )
     contract = next(
-        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v6"
+        c for c in load_catalog().contracts if c.contract_id == "speech-fidelity-v7"
     )
     result = FidelityJudge(contract).evaluate(
         RunEvidence(

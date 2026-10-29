@@ -307,7 +307,7 @@ def read_task_trials(path: Path, frame: BenchmarkFrame) -> list[TaskTrial]:
         raise ValueError(
             "Saved task selection differs from authoritative benchmark artifacts"
         )
-    from tau2.multilingual.runtime import resolve_task
+    from tau2.multilingual.runtime import resolve_task, without_delivery_details
 
     for task_id, context in contexts.items():
         source_task = source_tasks[task_id]
@@ -316,7 +316,11 @@ def read_task_trials(path: Path, frame: BenchmarkFrame) -> list[TaskTrial]:
                 "Saved task content differs from authoritative frozen task"
             )
         expected_context = resolve_task(authoritative, source_task, config.seed or 0)
-        if context != expected_context:
+        # Submitters use their own caller voices (TAU2_VOICE_ID_*), which change
+        # delivery, not the graded task or persona.
+        if without_delivery_details(context) != without_delivery_details(
+            expected_context
+        ):
             raise ValueError(
                 "Saved language/task/persona context differs from authoritative artifacts"
             )

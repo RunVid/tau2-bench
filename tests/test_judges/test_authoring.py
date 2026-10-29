@@ -337,9 +337,9 @@ FROZEN_CONTENT_SHA256 = {
     "naturalness-v17-rubric-v21-ko-indirect-honorific-v1": "f63d0206f2ea15d0c94e6204424b838f097aee16e7b334e0f91994d0865962dc",
     "hi-gender-v16-rubric-v26": "1577c154746efff554d87260f3b515d1fab793e8867ca7438640823011c95652",
     "quality-v7-rubric-v4": "879c417be526c964d1513919cdd5263bb5b12b8bdbb1ee46e272a6f5913b269e",
-    "speech-fidelity-v6": "c9b434fe028e748afab70f8e2267a8aba33726cd37c8621b45944ca773b09bf6",
+    "speech-fidelity-v7": "3699eca5008e21ea0106caae747384ad6f97b3aa479da1a82b6fdbad4217ce2c",
 }
-PAIRS_SHA256 = "306351529716ed5e42e24f95ad71c22bd51024956d6e229ce97c89d5490ed6dc"
+PAIRS_SHA256 = "2f34e3e24aa7bb3e5b657c8ad0f7d50f12430fd47355e7af38af50cd04f46d0a"
 
 
 def _sha256(value):

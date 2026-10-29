@@ -5,7 +5,11 @@ from pathlib import Path
 
 from pydantic import TypeAdapter
 
-from tau2.config import DEFAULT_JUDGE_CONCURRENCY, DEFAULT_JUDGE_PROCESSES
+from tau2.config import (
+    DEFAULT_JUDGE_CONCURRENCY,
+    DEFAULT_JUDGE_PROCESSES,
+    DEFAULT_JUDGE_UNIT_RETRIES,
+)
 from tau2.data_model.judges import DiagnosticId
 from tau2.judges.suite import JudgeExecutionConfig
 from tau2.judges.summary import build_export
@@ -67,6 +71,13 @@ def add_judges_args(parser: argparse.ArgumentParser) -> None:
                 help="Judge calls in flight per worker; default 1",
             )
             child.add_argument(
+                "--unit-retries",
+                type=int,
+                default=DEFAULT_JUDGE_UNIT_RETRIES,
+                help="Further attempts at units whose judge reply was incomplete or "
+                f"invalid, in the same run; default {DEFAULT_JUDGE_UNIT_RETRIES}",
+            )
+            child.add_argument(
                 "--preserve-errors",
                 action="store_true",
                 help="Keep recorded judge errors/partials while filling missing verdicts",
@@ -124,6 +135,7 @@ def run_judges(args: argparse.Namespace) -> None:
             processes=getattr(args, "processes", DEFAULT_JUDGE_PROCESSES),
             concurrency=getattr(args, "concurrency", DEFAULT_JUDGE_CONCURRENCY),
             retry_errors=not getattr(args, "preserve_errors", False),
+            unit_retries=getattr(args, "unit_retries", DEFAULT_JUDGE_UNIT_RETRIES),
         ),
     )
     document = output.model_dump_json(indent=2)

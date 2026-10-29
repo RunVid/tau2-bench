@@ -173,7 +173,7 @@ class BenchmarkQuality(ContractModel):
     benchmark_version: Annotated[str, Field(description="Released benchmark.")]
     frame_revision: Annotated[str, Field(description="Frozen frame revision.")]
     interaction_version: Literal["voice-v2-interaction-call-v1"] = INTERACTION_VERSION
-    experience_version: Literal["voice-v2-experience-call-v1"] = EXPERIENCE_VERSION
+    experience_version: Literal["voice-v2-experience-call-v2"] = EXPERIENCE_VERSION
     cells: Annotated[
         list[CellQuality], Field(description="One entry per frame cell, frame order.")
     ]

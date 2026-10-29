@@ -555,13 +555,30 @@ def test_saved_context_cannot_replace_reviewed_persona(
     path, result = saved_benchmark_cell
     result.info.language_tasks[
         result.tasks[0].id
-    ].persona.voice.voice_id = "unreviewed-voice"
+    ].persona.locale = "an unreviewed caller background"
     result.simulations[0].language_context = result.info.language_tasks[
         result.tasks[0].id
     ]
     result.save(path, format="dir")
     with pytest.raises(ValueError, match="authoritative"):
         read_task_trials(path, published_frame)
+
+
+def test_saved_context_keeps_the_submitters_own_caller_voice(
+    published_frame, saved_benchmark_cell
+):
+    """Own caller voices (TAU2_VOICE_ID_*) change delivery, not the persona."""
+    from tau2.metrics.benchmark import read_task_trials
+
+    path, result = saved_benchmark_cell
+    result.info.language_tasks[
+        result.tasks[0].id
+    ].persona.voice.voice_id = "submitters-own-voice"
+    result.simulations[0].language_context = result.info.language_tasks[
+        result.tasks[0].id
+    ]
+    result.save(path, format="dir")
+    assert read_task_trials(path, published_frame)[0].reward == 1
 
 
 def test_saved_validation_requires_pinned_assets_but_allows_relocation(

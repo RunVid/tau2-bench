@@ -63,8 +63,8 @@ options:
 ```text
 usage: tau2 judges suite [-h] [--only ONLY] [--trials TRIALS [TRIALS ...]]
                          [--processes PROCESSES] [--concurrency CONCURRENCY]
-                         [--preserve-errors] [--force] [--dry-run]
-                         [--registry REGISTRY] [--json] [--output OUTPUT]
+                         [--unit-retries UNIT_RETRIES] [--preserve-errors] [--force]
+                         [--dry-run] [--registry REGISTRY] [--json] [--output OUTPUT]
                          results
 
 positional arguments:
@@ -79,6 +79,9 @@ options:
                         Independent judge workers; default 1
   --concurrency CONCURRENCY
                         Judge calls in flight per worker; default 1
+  --unit-retries UNIT_RETRIES
+                        Further attempts at units whose judge reply was incomplete or
+                        invalid, in the same run; default 2
   --preserve-errors     Keep recorded judge errors/partials while filling missing
                         verdicts
   --force               Recompute matching verdicts

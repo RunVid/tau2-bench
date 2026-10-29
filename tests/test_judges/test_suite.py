@@ -520,6 +520,99 @@ def test_partial_results_report_coverage_and_resume_without_losing_successes(tmp
     assert report.complete and report.pass_units == 4 and report.error_units == 0
 
 
+def _errored_verdict(*errors):
+    verdict = passing_backend(None, None, None)
+    verdict.unit_errors = list(errors)
+    return verdict
+
+
+def test_failed_replies_are_asked_again_in_the_same_run(tmp_path):
+    """A judge that loops until its output limit on one unit usually succeeds
+    when asked again; without a retry that unit left its whole call unjudged
+    until someone re-ran the suite."""
+    from tau2.data_model.judges import UnitError
+
+    failed = UnitError(unit_id="bad", kind="response", error="output token limit")
+    replies = iter([_errored_verdict(failed), None])
+    asked = []
+
+    def resume(item, contract, measure, previous):
+        asked.append([error.unit_id for error in previous.unit_errors])
+        reply = next(replies)
+        if reply is not None:
+            return reply
+        return MeasureVerdict(
+            units=[
+                *previous.units,
+                previous.units[0].model_copy(update={"unit_id": "bad"}),
+            ]
+        )
+
+    path = tmp_path / "verdicts.json"
+    execute_suite(
+        inputs()[:1],
+        load_catalog(),
+        path,
+        only=[Measure.NATURALNESS],
+        backend=lambda *args: _errored_verdict(failed),
+        resume_backend=resume,
+        unit_retries=2,
+    )
+
+    [stored] = read_verdicts(path)
+    assert asked == [["bad"], ["bad"]]
+    assert stored.verdict.unit_errors == []
+    assert [u.unit_id for u in stored.verdict.units] == ["call", "bad"]
+    assert JudgeExecutionConfig().unit_retries == 2
+
+
+def test_input_errors_and_exhausted_retries_stay_recorded(tmp_path):
+    from tau2.data_model.judges import UnitError
+
+    missing = UnitError(unit_id="live", kind="input", error="No transcript")
+    failed = UnitError(unit_id="bad", kind="response", error="output token limit")
+    path = tmp_path / "verdicts.json"
+    execute_suite(
+        inputs()[:1],
+        load_catalog(),
+        path,
+        only=[Measure.NATURALNESS],
+        backend=lambda *args: _errored_verdict(missing),
+        resume_backend=lambda *args: pytest.fail("an input error was retried"),
+        unit_retries=2,
+    )
+    assert read_verdicts(path)[0].verdict.unit_errors == [missing]
+
+    attempts = []
+
+    def still_failing(item, contract, measure, previous):
+        attempts.append(1)
+        return previous
+
+    def lost_connection(*args):
+        raise RuntimeError("Lost connection")
+
+    for resume, expected in ((still_failing, 2), (lost_connection, 0)):
+        attempts.clear()
+        execute_suite(
+            inputs()[:1],
+            load_catalog(),
+            path,
+            only=[Measure.NATURALNESS],
+            force=True,
+            backend=lambda *args: _errored_verdict(failed),
+            resume_backend=resume,
+            unit_retries=2,
+        )
+        # The unit stays an error for a later suite run; the call's successful
+        # units are kept either way.
+        [stored] = read_verdicts(path)
+        assert len(attempts) == expected
+        assert stored.error is None
+        assert stored.verdict.unit_errors == [failed]
+        assert [u.unit_id for u in stored.verdict.units] == ["call"]
+
+
 def test_unjudged_unit_cannot_also_be_a_pass():
     from tau2.data_model.judges import UnitError
 
